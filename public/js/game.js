@@ -57,9 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         // 在开始获取前，给出一个“即将加载”的视觉提示
         questionTextElement.textContent = '...';
-        optionsContainer.innerHTML = ''; // 清空旧按钮
-        feedbackElement.textContent = ''; // 清空“正确”的反馈
-        // 立即开始获取
         fetchAndDisplayQuestion();
       }, 1000); 
 
