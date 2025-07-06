@@ -35,7 +35,7 @@ async function initialize(env) {
 }
 
 
-// --- 请求处理函数 (保持不变) ---
+// --- 请求处理函数 ---
 // 您本地能正常工作的onRequest函数就是最完善的
 export async function onRequest(context) {
   const { request, env } = context;
@@ -50,8 +50,6 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const lang = url.searchParams.get('lang') || 'zh';
     const difficulty = url.searchParams.get('difficulty') || 'easy';
-
-    // ... (这里是您完整的、正确的选题和组题逻辑) ...
 
     // 为了确保万无一失，我把这部分逻辑也重新贴一遍
     const allBookIds = Object.keys(idLookupTable);

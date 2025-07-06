@@ -24,7 +24,7 @@ body {
 /* 在 style.css 中找到这个选择器并替换它 */
 #game-container {
     background: white;
-    padding: 2rem;
+    padding: 2rem 2rem 1rem 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -71,7 +71,7 @@ button:disabled {
     font-size: 1.2rem;
     font-weight: bold;
     margin-top: 1.5rem;
-    height: 2rem;
+    height: 1rem;
 }
 
 button.correct {
@@ -153,4 +153,18 @@ button.incorrect {
         padding: 0.8rem;
         font-size: 0.9rem;
     }
+}
+
+
+#streak-container {
+    margin-top: 1.5rem;
+    color: #6c757d; /* 一个柔和的灰色 */
+    font-size: 0.9rem;
+}
+
+#streak-counter {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #28a745; /* 使用一个充满活力的绿色 */
+    margin-left: 0.5rem;
 }
