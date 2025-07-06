@@ -1,24 +1,32 @@
+// public/js/game.js (Final, Configurable Version)
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 获取页面元素 ---
+  // 选择数据来源，KV、R2或JSON文件
+  const DATA_SOURCE_MODE = 'LOCAL_FILE'; // 'CLOUDFLARE' 或 'LOCAL_FILE'
+
+  const API_ENDPOINTS = {
+    newQuestion: DATA_SOURCE_MODE === 'CLOUDFLARE' ? '/api/new-question' : '/api/new-question-from-file',
+    reviewQuestion: DATA_SOURCE_MODE === 'CLOUDFLARE' ? '/api/review-question' : '/api/review-question-from-file'
+  };
+
   const questionTitleElement = document.getElementById('question-title');
   const questionTextElement = document.getElementById('question-text');
   const optionsContainer = document.getElementById('options-container');
   const feedbackElement = document.getElementById('feedback');
   const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+  const streakContainerElement = document.getElementById('streak-container');
   const streakCounterElement = document.getElementById('streak-counter');
 
-  // --- 状态管理变量 ---
   let gameState = 'playing';
   let currentQuestionData = null;
   let reviewCache = new Map();
   let currentDifficulty = 'easy';
   let correctStreak = 0;
 
-  // --- 主问题逻辑 ---
   function fetchAndDisplayQuestion() {
     gameState = 'playing';
     resetUIForNewQuestion('这是哪节经文？', '...');
-    fetch(`/api/new-question?lang=zh&difficulty=${currentDifficulty}`)
+    streakContainerElement.style.display = 'block';
+    fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`)
       .then(handleFetchError)
       .then(data => {
         currentQuestionData = data;
@@ -31,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     questionTextElement.textContent = `"${data.promptVerseText}"`;
     optionsContainer.innerHTML = '';
     data.options.forEach(option => {
-      // 【优化】直接将option对象传入，更健壮
       const button = createButton(option, () => handleMainOptionClick(option.id));
       optionsContainer.appendChild(button);
     });
@@ -41,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     disableAllOptions();
     const correctId = currentQuestionData.correctOptionId;
     const selectedButton = optionsContainer.querySelector(`[data-id="${selectedId}"]`);
-
     if (selectedId === correctId) {
       correctStreak++;
       updateStreakDisplay();
@@ -57,16 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- 复习模式逻辑 (保持不变) ---
   async function startReviewMode(verseIdToReview) {
     gameState = 'reviewing';
     resetUIForNewQuestion(`复习一下:`, '正在加载复习题...');
+    streakContainerElement.style.display = 'none';
     try {
       if (reviewCache.has(verseIdToReview)) {
         renderReviewQuestion(reviewCache.get(verseIdToReview));
         return;
       }
-      const response = await fetch(`/api/review-question?lang=zh&verseId=${verseIdToReview}`);
+      const response = await fetch(`${API_ENDPOINTS.reviewQuestion}?lang=zh&verseId=${verseIdToReview}`);
       const data = await handleFetchError(response);
       reviewCache.set(verseIdToReview, data);
       renderReviewQuestion(data);
@@ -97,18 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
     }
   }
-  
+
   function returnToMainQuestion() {
     gameState = 'playing';
     resetUIForNewQuestion('这是哪节经文？', '...');
     renderMainQuestion(currentQuestionData);
   }
-  
-  // --- UI与事件处理 ---
+
   function createButton(option, onClick) {
     const button = document.createElement('button');
     button.textContent = option.text;
-    // 【优化】直接使用option.id，不再需要脆弱的find逻辑
     if (option.id) {
         button.dataset.id = option.id;
     }
@@ -130,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
     streakCounterElement.textContent = correctStreak;
   }
 
-  // --- 其他辅助函数 (保持不变) ---
   function resetUIForNewQuestion(title, questionText) { questionTitleElement.textContent = title; questionTextElement.textContent = questionText; optionsContainer.innerHTML = '加载中...'; feedbackElement.textContent = ''; }
   function disableAllOptions() { optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = true); }
   function enableAllOptions() { optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = false); }
@@ -138,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
   async function handleFetchError(response) { if (!response.ok) { const errorData = await response.json().catch(() => ({ error: "无法解析错误信息" })); throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error}`); } return response.json(); }
   function handleError(error) { questionTextElement.textContent = '出错了！'; feedbackElement.textContent = error.message; console.error('Error:', error); }
 
-  // --- 游戏开始 ---
   difficultyButtons.forEach(btn => btn.addEventListener('click', handleDifficultyChange));
   fetchAndDisplayQuestion();
 });
