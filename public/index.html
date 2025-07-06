@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>圣经问答游戏</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="app-wrapper">
+        <div id="difficulty-selector">
+            <button class="difficulty-btn active" data-difficulty="easy">普通</button>
+            <button class="difficulty-btn" data-difficulty="medium">中等</button>
+            <button class="difficulty-btn" data-difficulty="hard">困难</button>
+        </div>
+        <div id="game-container">
+            <h1 id="question-title">这是哪节经文？</h1>
+            <p id="question-text">...</p>
+            <div id="options-container"></div>
+            <p id="feedback"></p>
+        </div>
+    </div>
+    <script src="/js/game.js"></script>
+</body>
+</html>
