@@ -5,9 +5,9 @@ compatibility_date = "2025-07-06"
 main = "functions/api/new-question.js"
 
 # 绑定KV数据库
-[[kv_namespaces]]
-binding = "VERSES_KV"
-id = "952c07ba2f4448e98dd5d24b51f3fb2a"
+# [[kv_namespaces]]
+# binding = "VERSES_KV"
+# id = "952c07ba2f4448e98dd5d24b51f3fb2a"
 
 # 绑定R2存储桶
 [[r2_buckets]]

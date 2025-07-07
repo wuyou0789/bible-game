@@ -1,44 +1,183 @@
 {
-  "GEN": {
-    "1_1": {
-      "zh": "最初，上帝创造了天地。",
-      "en": "In the beginning God created the heavens and the earth."
+  "GEN": [
+    {
+      "id": "GEN_1_26",
+      "chapter": 1,
+      "verse": "26",
+      "text": {
+        "zh": "上帝​说：“我们要​按照​我们​的​形象​造​人，使​他们​跟​我们​相似，让​他们​管理​海​里​的​鱼、天​上​会​飞​的​生物、各​种​牲畜​和​各​种​在​地​上​爬行​的​生物，管理​整个​大地。”",
+        "en": "Then God said: “Let us make man in our image, according to our likeness, and let them have in subjection the fish of the sea and the flying creatures of the heavens and the domestic animals and all the earth and every creeping animal that is moving on the earth.”"
+      }
     },
-        "3_15": {
-      "zh": "我要使你和女人互相敌对，也要使你的后代和女人的后代互相敌对。他会打碎你的头，你会咬伤他的脚跟。”",
-      "en": "And I will put enmity between you and the woman and between your offspring and her offspring. He will crush your head, and you will strike him in the heel.”"
+    {
+      "id": "GEN_1_28",
+      "chapter": 1,
+      "verse": "28",
+      "text": {
+        "zh": "上帝​赐​福​给​他们，对​他们​说：“要​繁衍​增多，遍满​地面，开拓​大地，也​要​管理海​里​的​鱼、天​上​会​飞​的​生物​和​地​上​的​各​种​动物。”",
+        "en": "Further, God blessed them, and God said to them: “Be fruitful and become many, fill the earth and subdue it, and have in subjection the fish of the sea and the flying creatures of the heavens and every living creature that is moving on the earth.”"
+      }
     },
-    "5_5": {
-      "zh": "亚当活了930年就去世了。",
-      "en": "So all the days of Adam’s life amounted to 930 years, and then he died."
+    {
+      "id": "GEN_3_15",
+      "chapter": 3,
+      "verse": "15",
+      "text": {
+        "zh": "我​要​使​你和​女人互相​敌对，也​要​使​你​的​后代和​女人​的​后代互相​敌对。他会​打​碎你​的​头，你​会​咬​伤他​的​脚跟。”",
+        "en": "And I will put enmity between you and the woman and between your offspring and her offspring. He will crush your head, and you will strike him in the heel.”"
+      }
+    },
+    {
+      "id": "GEN_9_13",
+      "chapter": 9,
+      "verse": "13",
+      "text": {
+        "zh": "我​把​我​的​彩虹​放​在​云​中，作为​我​跟​大地​立约​的​凭证。",
+        "en": "I put my rainbow in the cloud, and it will serve as a sign of the covenant between me and the earth."
+      }
+    },
+    {
+      "id": "GEN_39_9",
+      "chapter": 39,
+      "verse": "9",
+      "text": {
+        "zh": "家​里​没有​人​比​我​大。除了​你​之​外，他​什么​都​交​给​我​了，因为​你​是​他​的​妻子。我​怎么​可以​做​这么​坏​的​事，得罪​上帝​呢？”",
+        "en": "There is no one greater in this house than I am, and he has not withheld from me anything at all except you, because you are his wife. So how could I commit this great badness and actually sin against God?”"
+      }
     }
-  },
-  "EXO": {
-    "3_14": {
-      "zh": "帝对摩西说：“我要成为什么，就成为什么。”又说：“你要告诉以色列人：‘那称为“我要成为什么，就成为什么”的，派我到你们这里来。’”",
-      "en": "So God said to Moses: “I Will Become What I Choose to Become.” And he added: “This is what you are to say to the Israelites, ‘I Will Become has sent me to you.’”"
+  ],
+  "EXO": [
+    {
+      "id": "EXO_9_16",
+      "chapter": 9,
+      "verse": "16",
+      "text": {
+        "zh": "我​让​你​活​到​现在，就是​要​向​你​显示​我​的​力量，让​我​的​名字​传​遍​天下。",
+        "en": "But for this very reason I have kept you in existence: to show you my power and to have my name declared in all the earth."
+      }
     },
-    "5_10": {
-      "zh": "监工和以色列人的工头就去告诉以色列人：“法老说：‘我不会再给你们麦秆。",
-      "en": "So the taskmasters and their foremen went out and said to the people: “Here is what Pharʹaoh has said, ‘I am giving you no more straw."
+    {
+      "id": "EXO_20_3",
+      "chapter": 20,
+      "verse": "3",
+      "text": {
+        "zh": "除​我​以外，你​不可​有​别​的​神。",
+        "en": "You must not have any other gods besides me."
+      }
     },
-        "32_14": {
-      "zh": "于是耶和华改变主意，没有按照他说的那样降祸给他的子民。",
-      "en": "So Jehovah began to reconsider the calamity that he had spoken of bringing on his people."
+    {
+      "id": "EXO_34_6",
+      "chapter": 34,
+      "verse": "6",
+      "text": {
+        "zh": "耶和华​在​摩西​面前​经过，宣告​说：“耶和华，耶和华，是​怜悯​人、体恤​人的​上帝，不​轻易​发怒，有​忠贞​的​厚爱，极其​信实​可靠，",
+        "en": "Jehovah was passing before him and declaring: “Jehovah, Jehovah, a God merciful and compassionate, slow to anger and abundant in loyal love and truth,"
+      }
+    },
+    {
+      "id": "EXO_34_7",
+      "chapter": 34,
+      "verse": "7",
+      "text": {
+        "zh": "对​千​代​的​人​显​出​忠贞​的​爱，赦免​罪过、过错、罪恶，却​一定​会​惩罚​该​受罚​的​人，父亲​犯罪，子孙​都​要​承受​恶果，直到​三四​代。”",
+        "en": "showing loyal love to thousands, pardoning error and transgression and sin, but he will by no means leave the guilty unpunished, bringing punishment for the error of fathers upon sons and upon grandsons, upon the third generation and upon the fourth generation.”"
+      }
     }
-  },
-  "MAT": {
-    "5_3": {
-      "zh": "渴望满足心灵需要的人有福了，因为天上的王国是他们的。",
-      "en": "“Happy are those conscious of their spiritual need, since the Kingdom of the heavens belongs to them."
+  ],
+  "LEV": [
+    {
+      "id": "LEV_19_2",
+      "chapter": 19,
+      "verse": "2",
+      "text": {
+        "zh": "“你​要​吩咐​以色列​所有​民众，告诉​他们：‘你们​要​圣洁，因为​我​耶和华​你们​的​上帝​是​圣洁​的。",
+        "en": "“Speak to the entire assembly of the Israelites and tell them, ‘You should be holy, because I, Jehovah your God, am holy."
+      }
     },
-        "7_12": {
-      "zh": "所以，无论什么事，你们希望别人怎样对待你们，你们就要怎样对待别人。其实，这就是法典和先知书所教的道理。",
-      "en": "“All things, therefore, that you want men to do to you, you also must do to them. This, in fact, is what the Law and the Prophets mean."
+    {
+      "id": "LEV_19_18",
+      "chapter": 19,
+      "verse": "18",
+      "text": {
+        "zh": "不可​报复，也​不可​对​人​怀恨​在心。要​爱​人​如​己。我​是​耶和华",
+        "en": "“‘You must not take vengeance nor hold a grudge against the sons of your people, and you must love your fellow man as yourself. I am Jehovah."
+      }
     },
-            "28_20": {
-      "zh": "然后他郑重地吩咐门徒，不要向任何人说他是基督。",
-      "en": "teaching them to observe all the things I have commanded you. And look! I am with you all the days until the conclusion of the system of things.”"
+    {
+      "id": "LEV_22_32",
+      "chapter": 22,
+      "verse": "32",
+      "text": {
+        "zh": "不可​亵渎​我​的​圣名。你们​要​在​以色列人​当中​尊​我​为​圣。我​是​耶和华，我​使​你们​成圣。",
+        "en": "You must not profane my holy name, and I must be sanctified in the midst of the Israelites. I am Jehovah, who is sanctifying you,"
+      }
     }
-  }
+  ],
+  "NUM": [
+    {
+      "id": "NUM_6_24",
+      "chapter": 6,
+      "verse": "24",
+      "text": {
+        "zh": "“愿​耶和华​赐​福​给​你，​保护​你。",
+        "en": "“May Jehovah bless you and safeguard you."
+      }
+    },
+    {
+      "id": "NUM_6_25",
+      "chapter": 6,
+      "verse": "25",
+      "text": {
+        "zh": "愿​耶和华​的​慈颜​光照​你，​施​恩​给​你。",
+        "en": "May Jehovah make his face shine upon you, and may he favor you."
+      }
+    },
+    {
+      "id": "NUM_6_26",
+      "chapter": 6,
+      "verse": "26",
+      "text": {
+        "zh": "愿​耶和华​恩待​你，​赐​平安​给​你。”’",
+        "en": "May Jehovah lift up his face toward you and grant you peace.”’"
+      }
+    },
+    {
+      "id": "NUM_23_19",
+      "chapter": 23,
+      "verse": "19",
+      "text": {
+        "zh": "上帝​跟​世人​不​同，​不​会​说谎；​他​跟​凡人​不​一样，​不​会​改变​主意。​他​讲​过​的​话，哪​有​不​履行​的？​他​说​过​的​事，哪​有​不​实践​的？",
+        "en": "God is not a mere man who tells lies, Nor a son of man who changes his mind. When he says something, will he not do it? When he speaks, will he not carry it out?"
+      }
+    }
+  ],
+  "DEU": [
+    {
+      "id": "DEU_6_5",
+      "chapter": 6,
+      "verse": "5",
+      "text": {
+        "zh": "你​要​全心，全力，用​全部​生命爱​耶和华​你​的​上帝。",
+        "en": "You must love Jehovah your God with all your heart and all your soul and all your strength."
+      }
+    },
+    {
+      "id": "DEU_6_6-7",
+      "chapter": 6,
+      "verse": "6-7",
+      "text": {
+        "zh": "今天​我​吩咐​你​的​这些​话，你​要​记​在​心​上，也​要​反复​教导​儿女，无论​坐​在​家​里​还是​走​在​路上，躺​下​还是​起来，都​要​教导​他们。",
+        "en": "These words that I am commanding you today must be on your heart,and you must inculcate them in your sons and speak of them when you sit in your house and when you walk on the road and when you lie down and when you get up."
+      }
+    },
+    {
+      "id": "DEU_30_19",
+      "chapter": 30,
+      "verse": "19",
+      "text": {
+        "zh": "今天​我​以​天地​为​证，我​把​生命​和​死亡、福分​和​诅咒，都​摆​在​你​面前。你​要​选择​生命，这样​你​和​你​的​子孙才​能​活​下去；",
+        "en": "I take the heavens and the earth as witnesses against you today that I have put life and death before you, the blessing and the curse; and you must choose life so that you may live, you and your descendants,"
+      }
+    }
+  ]
 }

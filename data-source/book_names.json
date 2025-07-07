@@ -1,12 +1,16 @@
 {
   "zh": {
-    "GEN": "创世纪",
+    "GEN": "创世记",
     "EXO": "出埃及记",
-    "MAT": "马太福音"
+    "LEV": "利未记",
+    "NUM": "民数记",
+    "DEU": "申命记"
   },
   "en": {
     "GEN": "Genesis",
     "EXO": "Exodus",
-    "MAT": "Matthew"
+    "LEV": "Leviticus",
+    "NUM": "Numbers",
+    "DEU": "Deuteronomy"
   }
 }
