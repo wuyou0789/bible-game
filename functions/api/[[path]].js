@@ -13,7 +13,7 @@ let idLookupTable = null;
 
 /**
  * 优雅的初始化函数
- * 在Worker冷启动时，从导入的JSON对象一次性生成所有需要的数据结构
+ * @param {object} env - Worker的环境变量，包含R2绑定
  */
 function initialize() {
     console.log("[Worker] Cold start: Initializing all data into memory from imported JSON files...");
@@ -79,7 +79,7 @@ function selectIdsBasedOnDifficulty(difficulty, localIdLookupTable) {
     let i = 0;
     while (distractionIds.length < 3 && i < allDistractions.length) {
         const randomDistraction = allDistractions[i];
-        if (!distractionIds.includes(randomDistraction)) {
+        if (!distractionIds.includes(randomDistraction) && randomDistraction !== correctId) {
             distractionIds.push(randomDistraction);
         }
         i++;
@@ -98,9 +98,12 @@ export async function onRequest(context) {
 
     try {
         // 如果内存缓存为空（冷启动），则执行初始化
-        if (!idLookupTable || !bookNames || !allVersesById) {
+        // ▼▼▼▼▼▼▼▼▼▼ 核心修复点 ▼▼▼▼▼▼▼▼▼▼
+        // 我们不再需要从R2初始化，因为数据已经通过import导入了
+        if (!idLookupTable) {
             initialize();
         }
+        // ▲▲▲▲▲▲▲▲▲▲ 修复结束 ▲▲▲▲▲▲▲▲▲▲
 
         let responseData;
 
