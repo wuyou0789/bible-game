@@ -1,32 +1,23 @@
-// functions/api/[[path]].js (The All-in-Memory Ultimate Worker - Final Fix V3)
+// functions/api/[[path]].js (The Ultimate All-in-Memory/File-based Worker)
+
+// --- 【核心改动】直接从项目文件导入JSON数据 ---
+// Cloudflare Pages在部署时，会自动将这些文件打包进Worker函数中
+import versesByBook from '../../data-source/verses_content.json';
+import bookNames from '../../data-source/book_names.json';
+
 
 // --- 全局缓存，我们唯一的“数据库” ---
+// 这些变量只会在Worker第一次被请求时（冷启动）填充一次
 let allVersesById = null;
 let idLookupTable = null;
-let bookNames = null;
 
 /**
  * 优雅的初始化函数
- * 在Worker冷启动时，从R2一次性读取所有数据并加载到内存中
+ * 在Worker冷启动时，从导入的JSON对象一次性生成所有需要的数据结构
  */
-async function initialize(env) {
-    console.log("[Worker] Cold start: Initializing all data into memory from R2...");
+function initialize() {
+    console.log("[Worker] Cold start: Initializing all data into memory from imported JSON files...");
     
-    // ▼▼▼▼▼▼▼▼▼▼ 核心修复点 ▼▼▼▼▼▼▼▼▼▼
-    // 将变量名改回与wrangler.toml中一致的 IDS_SOURCE_BUCKET
-    const [versesContentObj, bookNamesObj] = await Promise.all([
-        env.IDS_SOURCE_BUCKET.get('verses_content.json'),
-        env.IDS_SOURCE_BUCKET.get('book_names.json')
-    ]);
-    // ▲▲▲▲▲▲▲▲▲▲ 修复结束 ▲▲▲▲▲▲▲▲▲▲
-
-    // 健壮性检查，确保文件存在
-    if (!versesContentObj) throw new Error("FATAL: 'verses_content.json' not found in R2 bucket.");
-    if (!bookNamesObj) throw new Error("FATAL: 'book_names.json' not found in R2 bucket.");
-
-    const versesByBook = await versesContentObj.json();
-    bookNames = await bookNamesObj.json();
-
     const lookupTable = {};
     const versesMap = {};
 
@@ -34,7 +25,7 @@ async function initialize(env) {
         if (!versesByBook[bookId] || !Array.isArray(versesByBook[bookId])) continue;
         
         lookupTable[bookId] = versesByBook[bookId].map(verse => {
-            versesMap[verse.id] = verse;
+            versesMap[verse.id] = verse; // 用ID作为Key，存下整个经文对象
             return verse.id;
         });
     }
@@ -45,7 +36,7 @@ async function initialize(env) {
     console.log(`[Worker] Initialization complete. ${Object.keys(allVersesById).length} verses loaded into memory.`);
 }
 
-// --- 辅助函数：洗牌算法 ---
+// --- 辅助函数 (保持不变) ---
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -53,7 +44,6 @@ function shuffleArray(array) {
     }
 }
 
-// --- 辅助函数：根据难度选择ID ---
 function selectIdsBasedOnDifficulty(difficulty, localIdLookupTable) {
     const allBookIds = Object.keys(localIdLookupTable);
     const correctBookId = allBookIds[Math.floor(Math.random() * allBookIds.length)];
@@ -101,13 +91,15 @@ function selectIdsBasedOnDifficulty(difficulty, localIdLookupTable) {
 
 // --- 统一的请求处理入口 ---
 export async function onRequest(context) {
-    const { request, env } = context;
+    // 【关键】这个模式下，我们不再需要env了
+    const { request } = context;
     const url = new URL(request.url);
     const lang = url.searchParams.get('lang') || 'zh';
 
     try {
+        // 如果内存缓存为空（冷启动），则执行初始化
         if (!idLookupTable || !bookNames || !allVersesById) {
-            await initialize(env);
+            initialize();
         }
 
         let responseData;
@@ -163,9 +155,7 @@ export async function onRequest(context) {
             return new Response("API endpoint not found", { status: 404 });
         }
 
-        return new Response(JSON.stringify(responseData), {
-            headers: { 'Content-Type': 'application/json' },
-        });
+        return new Response(JSON.stringify(responseData));
 
     } catch (error) {
         console.error("Error in onRequest:", error);

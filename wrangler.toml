@@ -2,7 +2,7 @@ name = "bible-game"
 compatibility_date = "2025-07-06"
 
 # 【关键】指定主入口文件
-main = "functions/api/new-question.js"
+main = "functions/api/[[path]].js"
 
 # 绑定KV数据库
 # [[kv_namespaces]]
@@ -11,5 +11,5 @@ main = "functions/api/new-question.js"
 
 # 绑定R2存储桶
 [[r2_buckets]]
-binding = "IDS_SOURCE_BUCKET"
+binding = "BIBLE_DATA_BUCKET"
 bucket_name = "bible-game-verses"

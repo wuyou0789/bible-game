@@ -1,7 +1,6 @@
-// public/js/game.js (Final, Simplified Version)
+// public/js/game.js (Final Optimized Version with Seamless Transitions)
 document.addEventListener('DOMContentLoaded', () => {
     // --- API端点配置 ---
-    // 现在我们只有一套API，不再需要切换模式了
     const API_ENDPOINTS = {
         newQuestion: '/api/new-question',
         reviewQuestion: '/api/review-question'
@@ -22,10 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let reviewCache = new Map();
     let currentDifficulty = 'easy';
     let correctStreak = 0;
+    let isLoadingNextQuestion = false; // 防止重复加载
 
     // --- 主问题逻辑 ---
     function fetchAndDisplayQuestion() {
-        // 这个函数现在只负责获取和渲染，UI重置发生在调用它之前
+        if (isLoadingNextQuestion) return;
+        isLoadingNextQuestion = true;
+        
+        // 初始加载时，显示加载状态
+        if (!currentQuestionData) {
+            resetUIForNewQuestion('这是哪节经文？', '...');
+        }
+
         fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`)
             .then(handleFetchError)
             .then(data => {
@@ -33,12 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderMainQuestion(data);
                 enableAllOptions();
             })
-            .catch(handleError);
+            .catch(handleError)
+            .finally(() => {
+                isLoadingNextQuestion = false;
+            });
     }
 
     function renderMainQuestion(data) {
+        questionTitleElement.textContent = '这是哪节经文？';
         questionTextElement.textContent = `\"${data.promptVerseText}\"`;
         optionsContainer.innerHTML = '';
+        feedbackElement.textContent = '';
+        streakContainerElement.style.display = 'block';
+
         data.options.forEach(option => {
             const button = createButton(option, () => handleMainOptionClick(option.id));
             optionsContainer.appendChild(button);
@@ -46,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleMainOptionClick(selectedId) {
+        if (isLoadingNextQuestion) return; // 如果正在加载下一题，则不响应点击
+
         disableAllOptions();
         const correctId = currentQuestionData.correctOptionId;
         const selectedButton = optionsContainer.querySelector(`[data-id="${selectedId}"]`);
@@ -56,10 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
             showFeedback('✅ 正确!', 'green');
             if (selectedButton) selectedButton.classList.add('correct');
             
-            setTimeout(() => {
-                resetUIForNewQuestion('这是哪节经文？', '...');
-                fetchAndDisplayQuestion();
-            }, 1000); 
+            // 【极致优化】
+            // 1. 立即在后台开始获取下一题的数据
+            const nextQuestionPromise = fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`)
+                .then(handleFetchError);
+
+            // 2. 创建一个保证至少有1秒视觉延迟的Promise
+            const delayPromise = new Promise(resolve => setTimeout(resolve, 1000));
+
+            // 3. 等待数据获取和最小延迟都完成后，再用新数据更新UI
+            Promise.all([nextQuestionPromise, delayPromise])
+                .then(([newData]) => {
+                    currentQuestionData = newData;
+                    renderMainQuestion(newData); // 用新数据直接渲染，跳过加载状态
+                    enableAllOptions();
+                })
+                .catch(handleError);
 
         } else {
             correctStreak = 0;
@@ -70,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 复习模式逻辑 ---
+    // --- 复习模式逻辑 (保持不变) ---
     async function startReviewMode(verseIdToReview) {
         gameState = 'reviewing';
         resetUIForNewQuestion(`复习一下:`, '正在加载复习题...');
@@ -114,9 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function returnToMainQuestion() {
         gameState = 'playing';
-        resetUIForNewQuestion('这是哪节经文？', '...');
-        streakContainerElement.style.display = 'block';
-        renderMainQuestion(currentQuestionData);
+        renderMainQuestion(currentQuestionData); // 直接从内存中恢复主问题
         enableAllOptions();
     }
     
@@ -132,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleDifficultyChange(event) {
+        if (isLoadingNextQuestion) return;
         const selectedBtn = event.target;
         currentDifficulty = selectedBtn.dataset.difficulty;
         correctStreak = 0;
         updateStreakDisplay();
         difficultyButtons.forEach(btn => btn.classList.remove('active'));
         selectedBtn.classList.add('active');
-        resetUIForNewQuestion('这是哪节经文？', '...');
         fetchAndDisplayQuestion();
     }
 
@@ -171,6 +197,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 游戏开始 ---
     difficultyButtons.forEach(btn => btn.addEventListener('click', handleDifficultyChange));
-    resetUIForNewQuestion('这是哪节经文？', '...');
-    fetchAndDisplayQuestion();
+    fetchAndDisplayQuestion(); // 初始加载
 });
