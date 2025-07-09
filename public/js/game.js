@@ -1,6 +1,7 @@
-// public/js/game.js (Final Optimized Version with Seamless Transitions)
+// public/js/game.js (Final Perfect Experience Version)
 document.addEventListener('DOMContentLoaded', () => {
     // --- API端点配置 ---
+    // 我们现在只使用一套从D1数据库获取数据的API
     const API_ENDPOINTS = {
         newQuestion: '/api/new-question',
         reviewQuestion: '/api/review-question'
@@ -16,19 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const streakCounterElement = document.getElementById('streak-counter');
 
     // --- 状态管理变量 ---
-    let gameState = 'playing';
-    let currentQuestionData = null;
-    let reviewCache = new Map();
+    let gameState = 'playing'; // 'playing' 或 'reviewing'
+    let currentQuestionData = null; // 用于缓存主问题数据
+    let reviewCache = new Map(); // 用于缓存已获取的复习题
     let currentDifficulty = 'easy';
     let correctStreak = 0;
-    let isLoadingNextQuestion = false; // 防止重复加载
+    let isLoading = false; // 全局加载状态，防止用户在加载时重复点击
 
     // --- 主问题逻辑 ---
     function fetchAndDisplayQuestion() {
-        if (isLoadingNextQuestion) return;
-        isLoadingNextQuestion = true;
+        if (isLoading) return;
+        isLoading = true;
         
-        // 初始加载时，显示加载状态
+        // 只有在游戏初次加载时，才显示“加载中”
         if (!currentQuestionData) {
             resetUIForNewQuestion('这是哪节经文？', '...');
         }
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(handleError)
             .finally(() => {
-                isLoadingNextQuestion = false;
+                isLoading = false;
             });
     }
 
@@ -60,23 +61,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleMainOptionClick(selectedId) {
-        if (isLoadingNextQuestion) return; // 如果正在加载下一题，则不响应点击
+        if (isLoading) return;
 
         disableAllOptions();
         const correctId = currentQuestionData.correctOptionId;
         const selectedButton = optionsContainer.querySelector(`[data-id="${selectedId}"]`);
 
         if (selectedId === correctId) {
+            // --- 回答正确 ---
             correctStreak++;
             updateStreakDisplay();
             showFeedback('✅ 正确!', 'green');
             if (selectedButton) selectedButton.classList.add('correct');
             
-            // 【极致优化】
+            isLoading = true;
             // 1. 立即在后台开始获取下一题的数据
-            const nextQuestionPromise = fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`)
-                .then(handleFetchError);
-
+            const nextQuestionPromise = fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`).then(handleFetchError);
             // 2. 创建一个保证至少有1秒视觉延迟的Promise
             const delayPromise = new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -84,42 +84,68 @@ document.addEventListener('DOMContentLoaded', () => {
             Promise.all([nextQuestionPromise, delayPromise])
                 .then(([newData]) => {
                     currentQuestionData = newData;
-                    renderMainQuestion(newData); // 用新数据直接渲染，跳过加载状态
+                    renderMainQuestion(newData);
                     enableAllOptions();
                 })
-                .catch(handleError);
+                .catch(handleError)
+                .finally(() => {
+                    isLoading = false;
+                });
 
         } else {
+            // --- 回答错误 ---
             correctStreak = 0;
             updateStreakDisplay();
             if(selectedButton) selectedButton.classList.add('incorrect');
             showFeedback('❌ 答错了。我们一起来复习一下这节经文吧！', '#db7100');
-            setTimeout(() => startReviewMode(selectedId), 1500);
+            
+            // 【极致优化】调用新的、无缝切换的复习模式函数
+            startReviewMode(selectedId);
         }
     }
 
-    // --- 复习模式逻辑 (保持不变) ---
+    // --- 复习模式逻辑 ---
     async function startReviewMode(verseIdToReview) {
+        isLoading = true;
         gameState = 'reviewing';
-        resetUIForNewQuestion(`复习一下:`, '正在加载复习题...');
         streakContainerElement.style.display = 'none';
+        
         try {
+            // 1. 在后台获取复习题数据
+            let reviewDataPromise;
             if (reviewCache.has(verseIdToReview)) {
-                renderReviewQuestion(reviewCache.get(verseIdToReview));
-                return;
+                reviewDataPromise = Promise.resolve(reviewCache.get(verseIdToReview));
+            } else {
+                reviewDataPromise = fetch(`${API_ENDPOINTS.reviewQuestion}?lang=zh&verseId=${verseIdToReview}`)
+                    .then(handleFetchError)
+                    .then(data => {
+                        reviewCache.set(verseIdToReview, data);
+                        return data;
+                    });
             }
-            const response = await fetch(`${API_ENDPOINTS.reviewQuestion}?lang=zh&verseId=${verseIdToReview}`);
-            const data = await handleFetchError(response);
-            reviewCache.set(verseIdToReview, data);
-            renderReviewQuestion(data);
+            
+            // 2. 创建一个保证至少有1.5秒视觉延迟的Promise
+            const delayPromise = new Promise(resolve => setTimeout(resolve, 1500));
+
+            // 3. 等待数据和延迟都完成后，直接渲染复习界面
+            const [reviewData] = await Promise.all([reviewDataPromise, delayPromise]);
+            
+            renderReviewQuestion(reviewData);
+            enableAllOptions();
+
         } catch (error) {
             handleError(error);
+        } finally {
+            isLoading = false;
         }
     }
 
     function renderReviewQuestion(data) {
+        questionTitleElement.textContent = '复习一下:';
         questionTextElement.textContent = data.questionText;
         optionsContainer.innerHTML = '';
+        feedbackElement.textContent = ''; 
+
         data.options.forEach(option => {
             const button = createButton(option, () => handleReviewOptionClick(option.isCorrect));
             optionsContainer.appendChild(button);
@@ -127,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleReviewOptionClick(isCorrect) {
+        if (isLoading) return;
         disableAllOptions();
         if (isCorrect) {
             showFeedback('👍 复习正确！现在回到主问题。', 'green');
@@ -142,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function returnToMainQuestion() {
         gameState = 'playing';
-        renderMainQuestion(currentQuestionData); // 直接从内存中恢复主问题
+        renderMainQuestion(currentQuestionData);
         enableAllOptions();
     }
     
@@ -158,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleDifficultyChange(event) {
-        if (isLoadingNextQuestion) return;
+        if (isLoading) return;
         const selectedBtn = event.target;
         currentDifficulty = selectedBtn.dataset.difficulty;
         correctStreak = 0;
@@ -190,12 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.json(); 
     }
     function handleError(error) { 
-        questionTextElement.textContent = '出错了！'; 
+        isLoading = false;
+        questionTitleElement.textContent = '出错了！'; 
         feedbackElement.textContent = error.message; 
         console.error('Error:', error); 
     }
 
     // --- 游戏开始 ---
     difficultyButtons.forEach(btn => btn.addEventListener('click', handleDifficultyChange));
-    fetchAndDisplayQuestion(); // 初始加载
+    fetchAndDisplayQuestion();
 });

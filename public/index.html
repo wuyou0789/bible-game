@@ -9,21 +9,28 @@
 
 <body>
     <div id="app-wrapper">
-        <div id="difficulty-selector">
-            <button class="difficulty-btn active" data-difficulty="easy">普通</button>
-            <button class="difficulty-btn" data-difficulty="medium">中等</button>
-            <button class="difficulty-btn" data-difficulty="hard">困难</button>
-            <div id="streak-container">
-                连续答对: <span id="streak-counter">0</span>
+        <div id="side-panel">
+            <div id="difficulty-selector">
+                <button class="difficulty-btn active" data-difficulty="easy">普通</button>
+                <button class="difficulty-btn" data-difficulty="medium">中等</button>
+                <button class="difficulty-btn" data-difficulty="hard">困难</button>
             </div>
+            <div id="streak-container">
+                <span id="streak-label">连续答对</span>: <span id="streak-counter">0</span>
+            </div>
+            
+            <!-- ▼▼▼▼▼▼▼▼▼▼ 新增语言切换器 ▼▼▼▼▼▼▼▼▼▼ -->
+            <div id="language-selector">
+                <button class="lang-btn active" data-lang="zh">中文</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+            <!-- ▲▲▲▲▲▲▲▲▲▲ 新增结束 ▲▲▲▲▲▲▲▲▲▲ -->
+
         </div>
         <div id="game-container">
             <h1 id="question-title">这是哪节经文？</h1>
             <p id="question-text">...</p>
             <div id="options-container"></div>
-
-
-
             <p id="feedback"></p>
         </div>
     </div>
