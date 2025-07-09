@@ -12,7 +12,12 @@ function shuffleArray(array) {
 }
 
 function getRandomItems(arr, numItems) {
-    if (!arr || arr.length < numItems) return [];
+    if (!arr || arr.length < numItems) {
+        // 如果源数组不够长，就返回所有元素
+        const shuffled = [...(arr || [])];
+        shuffleArray(shuffled);
+        return shuffled;
+    }
     const shuffled = [...arr];
     shuffleArray(shuffled);
     return shuffled.slice(0, numItems);
@@ -79,7 +84,7 @@ export default {
                 shuffleArray(reviewOptions);
 
                 reviewQuestions[distractionRef] = {
-                    questionText: `${correctReviewVerse.book_name} ${correctReviewVerse.chapter}:${correctVerseData.verse_num.replace(/-/g, '–')}`,
+                    questionText: `${correctReviewVerse.book_name} ${correctReviewVerse.chapter}:${correctReviewVerse.verse_num.replace(/-/g, '–')}`,
                     options: reviewOptions
                 };
             });
