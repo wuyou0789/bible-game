@@ -110,30 +110,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 4. UI Rendering ---
 
-  function displayMainQuestion() {
-    const question = state.activePackage.mainQuestion;
-    const title = (state.bookNames[state.currentLang] && state.bookNames[state.currentLang]['UI_MAIN_TITLE']) || '这是哪节经文？';
-    updateUIState('playing', title, `"${question.promptVerseText}"`);
-    elements.streakContainer.style.display = 'block';
+function displayMainQuestion() {
+  const question = state.activePackage.mainQuestion;
+  const title = (state.bookNames[state.currentLang] && state.bookNames[state.currentLang]['UI_MAIN_TITLE']) || '这是哪节经文？';
+  updateUIState('playing', title, `"${question.promptVerseText}"`);
+  elements.streakContainer.style.display = 'block';
 
-    elements.optionsContainer.innerHTML = '';
-    question.options.forEach(option => {
-      const button = createButton(option, () => handleMainOptionClick(option.id, option.ref));
-      elements.optionsContainer.appendChild(button);
-    });
-  }
+  elements.optionsContainer.innerHTML = '';
+  question.options.forEach(option => {
+    // ▼▼▼▼▼ 前端在这里进行翻译和拼接 ▼▼▼▼▼
+    const bookName = state.bookNames[state.currentLang][option.bookId];
+    const displayText = `${bookName} ${option.chapter}:${option.verseNum}`;
+    const buttonOption = { id: option.id, ref: option.ref, text: displayText }; // 创建一个新的option对象用于按钮
+    // ▲▲▲▲▲ 修改结束 ▲▲▲▲▲
+    
+    const button = createButton(buttonOption, () => handleMainOptionClick(option.id, option.ref));
+    elements.optionsContainer.appendChild(button);
+  });
+}
   
-  function displayReviewQuestion(reviewQuestion) {
-    const title = (state.bookNames[state.currentLang] && state.bookNames[state.currentLang]['UI_REVIEW_TITLE']) || '复习一下:';
-    updateUIState('reviewing', title, reviewQuestion.questionText);
-    elements.streakContainer.style.display = 'none';
+function displayReviewQuestion(reviewQuestion) {
+  // ▼▼▼▼▼ 前端在这里进行翻译和拼接 ▼▼▼▼▼
+  const bookName = state.bookNames[state.currentLang][reviewQuestion.bookId];
+  const questionText = `${bookName} ${reviewQuestion.chapter}:${reviewQuestion.verseNum}`;
+  const title = (state.bookNames[state.tate.currentLang] && state.bookNames[state.currentLang]['UI_REVIEW_TITLE']) || '复习一下:';
+  // ▲▲▲▲▲ 修改结束 ▲▲▲▲▲
 
-    elements.optionsContainer.innerHTML = '';
-    reviewQuestion.options.forEach(option => {
-      const button = createButton(option, () => handleReviewClick(option.isCorrect));
-      elements.optionsContainer.appendChild(button);
-    });
-  }
+  updateUIState('reviewing', title, questionText);
+  elements.streakContainer.style.display = 'none';
+
+  elements.optionsContainer.innerHTML = '';
+  reviewQuestion.options.forEach(option => {
+    const button = createButton(option, () => handleReviewClick(option.isCorrect));
+    elements.optionsContainer.appendChild(button);
+  });
+}
 
   // --- 5. Event Handlers ---
 
@@ -202,13 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 6. UI Helper Functions ---
-  function createButton(option, onClick) {
-    const button = document.createElement('button');
-    button.textContent = option.text;
-    if (option.id) button.dataset.id = option.id;
-    button.addEventListener('click', onClick);
-    return button;
-  }
+function createButton(option, onClick) {
+  const button = document.createElement('button');
+  button.textContent = option.text;
+  // 【关键修改】现在它能正确地处理主问题和复习题两种不同的option结构
+  if (option.id) button.dataset.id = option.id;
+  if (option.ref) button.dataset.ref = option.ref;
+  button.addEventListener('click', onClick);
+  return button;
+}
   
   function updateStreakDisplay() {
     elements.streakCounter.textContent = state.correctStreak;
