@@ -1,8 +1,6 @@
 name = "bible-game"
 compatibility_date = "2025-07-06"
 
-# 【关键】指定主入口文件
-main = "functions/api/[[path]].js"
 
 # 绑定KV数据库
 # [[kv_namespaces]]

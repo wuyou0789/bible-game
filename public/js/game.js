@@ -1,270 +1,240 @@
-// ==================================================================
-// public/js/game.js (Final Perfect Version)
-// 架构: D1数据库 + “题目包”API + 前端即时预取
-// ==================================================================
+// public/js/game.js (Final, Robust, Production-Ready Version)
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- API端点配置 ---
-    // 我们只调用这一个“获取题目包”的统一API
-    const API_ENDPOINT = '/api/get-question-bundle';
+  // --- 1. DOM Element Cache ---
+  const elements = {
+    title: document.getElementById('question-title'),
+    text: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    feedback: document.getElementById('feedback'),
+    difficultyButtons: document.querySelectorAll('.difficulty-btn'),
+    languageButtons: document.querySelectorAll('.lang-btn'),
+    streakContainer: document.getElementById('streak-container'),
+    streakCounter: document.getElementById('streak-counter'),
+  };
 
-    // --- UI文本国际化字典 ---
-    const UI_TEXT = {
-        zh: {
-            title: '这是哪节经文？',
-            reviewTitle: '复习一下:',
-            loading: '加载中...',
-            correct: '✅ 正确!',
-            incorrect: '❌ 答错了...',
-            reviewCorrect: '👍 复习正确！',
-            reviewIncorrect: '不对哦，再仔细看看。',
-            errorTitle: '出错了！',
-            streakLabel: '连续答对'
-        },
-        en: {
-            title: 'Which verse is this?',
-            reviewTitle: 'Review:',
-            loading: 'Loading...',
-            correct: '✅ Correct!',
-            incorrect: '❌ Incorrect...',
-            reviewCorrect: '👍 Great! Back to the main question.',
-            reviewIncorrect: 'Not quite, try again.',
-            errorTitle: 'An error occurred!',
-            streakLabel: 'Streak'
-        }
-    };
+  // --- 2. Game State Management ---
+  const state = {
+    gameState: 'loading', // loading, playing, answered, reviewing
+    activePackage: null,
+    prefetchBuffer: null,
+    isLoadingNext: false,
+    currentDifficulty: 'easy',
+    currentLang: 'zh',
+    correctStreak: 0,
+    bookNames: null,
+  };
 
-    // --- 获取所有HTML元素 ---
-    const questionTitleElement = document.getElementById('question-title');
-    const questionTextElement = document.getElementById('question-text');
-    const optionsContainer = document.getElementById('options-container');
-    const feedbackElement = document.getElementById('feedback');
-    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
-    const streakContainerElement = document.getElementById('streak-container');
-    const streakCounterElement = document.getElementById('streak-counter');
-    const languageButtons = document.querySelectorAll('.lang-btn');
-    const streakLabelElement = document.getElementById('streak-label');
+  // --- 3. Core Game Flow ---
 
-    // --- 状态管理变量 ---
-    let gameState = 'playing'; // 'playing' 或 'reviewing'
-    let currentBundle = null; // 缓存整个当前题目包
-    let nextBundlePromise = null; // 用于预取下一个题目包
-    let currentDifficulty = 'easy';
-    let currentLang = 'zh';
-    let correctStreak = 0;
-    let isLoading = false; // 全局加载状态，防止用户在加载时重复点击
+  /**
+   * Initializes the game: fetches book names and the first question package.
+   */
+  async function startGame() {
+    updateUIState('loading', '正在准备游戏...');
+    try {
+      const [names, pkg] = await Promise.all([
+        fetchBookNames(),
+        fetchFullQuestionPackage(),
+      ]);
 
-    /**
-     * 游戏开始的入口函数
-     */
-    function startGame() {
-        // 为UI设置初始语言
-        streakLabelElement.textContent = UI_TEXT[currentLang].streakLabel;
-        // 获取第一个题目包并开始游戏
-        loadNextBundleAndRender();
+      if (!names || !pkg) throw new Error("Failed to load initial game data.");
+      
+      state.bookNames = names;
+      state.activePackage = pkg;
+
+      displayMainQuestion();
+      prefetchNextPackage();
+
+    } catch (error) {
+      handleError(error);
     }
+  }
 
-    /**
-     * 加载下一个题目包并渲染主问题
-     * 这是游戏的核心循环驱动函数
-     */
-    function loadNextBundleAndRender() {
-        if (isLoading) return;
-        isLoading = true;
-        resetUIForNewQuestion();
-
-        // 如果已经有预取的题目包，就直接使用它；否则，发起新的请求。
-        const bundlePromise = nextBundlePromise || fetch(`${API_ENDPOINT}?lang=${currentLang}&difficulty=${currentDifficulty}&theme=default`).then(handleFetchError);
-        nextBundlePromise = null; // 无论如何，用掉了就清空
-
-        bundlePromise.then(bundle => {
-            currentBundle = bundle;
-            renderMainQuestion(bundle.mainQuestion);
-            enableAllOptions();
-            
-            // 【核心优化】立即在后台预取下一个题目包
-            prefetchNextBundle();
-        }).catch(handleError)
-          .finally(() => {
-            isLoading = false;
-          });
+  /**
+   * Fetches a new "super" question package from the backend.
+   */
+  async function fetchFullQuestionPackage() {
+    try {
+      const url = `/api/get-full-question?difficulty=${state.currentDifficulty}&lang=${state.currentLang}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({ details: "Unknown API error" }));
+        throw new Error(errData.details || 'Failed to fetch question package.');
+      }
+      return await response.json();
+    } catch (error) {
+      handleError(error);
+      return null; // Return null on failure
     }
+  }
 
-    /**
-     * 在后台悄悄地获取下一个题目包，并将其Promise存起来
-     */
-    function prefetchNextBundle() {
-        nextBundlePromise = fetch(`${API_ENDPOINT}?lang=${currentLang}&difficulty=${currentDifficulty}&theme=default`).then(handleFetchError);
+  /**
+   * Fetches the book names JSON from our new dedicated API.
+   */
+  async function fetchBookNames() {
+    // We can cache this in the session as it rarely changes.
+    if (state.bookNames) return state.bookNames; 
+    try {
+      const response = await fetch('/api/get-book-names');
+      if (!response.ok) throw new Error('Could not load book names.');
+      const names = await response.json();
+      state.bookNames = names;
+      return names;
+    } catch(e) {
+      handleError(e);
+      return null;
     }
+  }
+
+  /**
+   * Fetches the next package in the background.
+   */
+  function prefetchNextPackage() {
+    if (state.isLoadingNext || state.prefetchBuffer) return;
     
-    /**
-     * 根据主问题数据渲染界面
-     * @param {object} mainQuestion - 主问题对象
-     */
-    function renderMainQuestion(mainQuestion) {
-        gameState = 'playing';
-        questionTitleElement.textContent = UI_TEXT[currentLang].title;
-        questionTextElement.textContent = `\"${mainQuestion.promptVerseText}\"`;
-        optionsContainer.innerHTML = '';
-        feedbackElement.textContent = '';
-        streakContainerElement.style.display = 'block';
-
-        mainQuestion.options.forEach(option => {
-            const button = createButton(option, () => handleMainOptionClick(option.id));
-            optionsContainer.appendChild(button);
-        });
-    }
-
-    /**
-     * 处理用户点击主问题选项的逻辑
-     * @param {string} selectedId - 用户选择的选项ID (verse_ref)
-     */
-    function handleMainOptionClick(selectedId) {
-        if (isLoading) return;
-        disableAllOptions();
-        
-        const { correctOptionId } = currentBundle.mainQuestion;
-        const selectedButton = optionsContainer.querySelector(`[data-id="${selectedId}"]`);
-
-        if (selectedId === correctOptionId) {
-            // --- 回答正确 ---
-            correctStreak++;
-            updateStreakDisplay();
-            showFeedback(UI_TEXT[currentLang].correct, 'green');
-            if (selectedButton) selectedButton.classList.add('correct');
-            // 延迟1秒后，直接从内存中加载已预取好的下一题，实现无缝切换
-            setTimeout(loadNextBundleAndRender, 1000);
-        } else {
-            // --- 回答错误 ---
-            correctStreak = 0;
-            updateStreakDisplay();
-            showFeedback(UI_TEXT[currentLang].incorrect, '#db7100');
-            if (selectedButton) selectedButton.classList.add('incorrect');
-            
-            // 延迟1.5秒后，直接从内存中获取复习题来渲染
-            setTimeout(() => {
-                const reviewData = currentBundle.reviewQuestions[selectedId];
-                renderReviewQuestion(reviewData);
-                enableAllOptions();
-            }, 1500);
-        }
-    }
-
-    /**
-     * 根据复习题数据渲染界面
-     * @param {object} reviewData - 复习题对象
-     */
-    function renderReviewQuestion(reviewData) {
-        gameState = 'reviewing';
-        questionTitleElement.textContent = UI_TEXT[currentLang].reviewTitle;
-        questionTextElement.textContent = reviewData.questionText;
-        optionsContainer.innerHTML = '';
-        feedbackElement.textContent = '';
-        streakContainerElement.style.display = 'none';
-
-        reviewData.options.forEach(option => {
-            const button = createButton(option, () => handleReviewOptionClick(option.isCorrect));
-            optionsContainer.appendChild(button);
-        });
-    }
-
-    /**
-     * 处理用户点击复习题选项的逻辑
-     * @param {boolean} isCorrect - 用户选择的选项是否正确
-     */
-    function handleReviewOptionClick(isCorrect) {
-        disableAllOptions();
-        if (isCorrect) {
-            showFeedback(UI_TEXT[currentLang].reviewCorrect, 'green');
-            setTimeout(returnToMainQuestion, 1500);
-        } else {
-            showFeedback(UI_TEXT[currentLang].reviewIncorrect, 'red');
-            setTimeout(() => {
-                enableAllOptions();
-                feedbackElement.textContent = '';
-            }, 1000);
-        }
-    }
-
-    /**
-     * 从复习模式返回到主问题界面
-     */
-    function returnToMainQuestion() {
-        renderMainQuestion(currentBundle.mainQuestion);
-        enableAllOptions();
-    }
+    state.isLoadingNext = true;
+    console.log("...后台正在预取下一超级包...");
     
-    // --- UI与事件处理 ---
-    function createButton(option, onClick) {
-        const button = document.createElement('button');
-        button.textContent = option.text;
-        if (option.id) {
-            button.dataset.id = option.id;
-        }
-        button.addEventListener('click', onClick);
-        return button;
-    }
+    fetchFullQuestionPackage().then(pkg => {
+      if (pkg) {
+        state.prefetchBuffer = pkg;
+        console.log("✅ 下一超级包已就绪！");
+      }
+    }).catch(error => {
+      console.error("Prefetch failed:", error);
+    }).finally(() => {
+      state.isLoadingNext = false;
+    });
+  }
 
-    function handleDifficultyChange(event) {
-        if (isLoading) return;
-        const selectedBtn = event.target;
-        currentDifficulty = selectedBtn.dataset.difficulty;
-        correctStreak = 0;
-        updateStreakDisplay();
-        difficultyButtons.forEach(btn => btn.classList.remove('active'));
-        selectedBtn.classList.add('active');
-        // 重置预取，以获取新难度的题目
-        nextBundlePromise = null; 
-        loadNextBundleAndRender();
-    }
+  // --- 4. UI Rendering ---
 
-    function handleLanguageChange(event) {
-        if (isLoading) return;
-        const selectedBtn = event.target;
-        currentLang = selectedBtn.dataset.lang;
-        streakLabelElement.textContent = UI_TEXT[currentLang].streakLabel;
-        languageButtons.forEach(btn => btn.classList.remove('active'));
-        selectedBtn.classList.add('active');
-        // 清空所有缓存并重新开始游戏
-        reviewCache.clear();
-        nextBundlePromise = null;
-        correctStreak = 0;
-        updateStreakDisplay();
-        loadNextBundleAndRender();
-    }
+  function displayMainQuestion() {
+    const question = state.activePackage.mainQuestion;
+    const title = (state.bookNames[state.currentLang] && state.bookNames[state.currentLang]['UI_MAIN_TITLE']) || '这是哪节经文？';
+    updateUIState('playing', title, `"${question.promptVerseText}"`);
+    elements.streakContainer.style.display = 'block';
 
-    function updateStreakDisplay() {
-        streakCounterElement.textContent = correctStreak;
-    }
+    elements.optionsContainer.innerHTML = '';
+    question.options.forEach(option => {
+      const button = createButton(option, () => handleMainOptionClick(option.id, option.ref));
+      elements.optionsContainer.appendChild(button);
+    });
+  }
+  
+  function displayReviewQuestion(reviewQuestion) {
+    const title = (state.bookNames[state.currentLang] && state.bookNames[state.currentLang]['UI_REVIEW_TITLE']) || '复习一下:';
+    updateUIState('reviewing', title, reviewQuestion.questionText);
+    elements.streakContainer.style.display = 'none';
 
-    // --- 辅助函数 ---
-    function resetUIForNewQuestion() { 
-        questionTitleElement.textContent = UI_TEXT[currentLang].title; 
-        questionTextElement.textContent = '...'; 
-        optionsContainer.innerHTML = `<p>${UI_TEXT[currentLang].loading}</p>`; 
-        feedbackElement.textContent = ''; 
-    }
-    function disableAllOptions() { optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = true); }
-    function enableAllOptions() { optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = false); }
-    function showFeedback(message, color) { feedbackElement.textContent = message; feedbackElement.style.color = color; }
-    
-    async function handleFetchError(response) { 
-        if (!response.ok) { 
-            const errorData = await response.json().catch(() => ({ error: "无法解析错误信息" })); 
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error || response.statusText}`); 
-        } 
-        return response.json(); 
-    }
+    elements.optionsContainer.innerHTML = '';
+    reviewQuestion.options.forEach(option => {
+      const button = createButton(option, () => handleReviewClick(option.isCorrect));
+      elements.optionsContainer.appendChild(button);
+    });
+  }
 
-    function handleError(error) { 
-        isLoading = false;
-        questionTitleElement.textContent = UI_TEXT[currentLang].errorTitle; 
-        feedbackElement.textContent = error.message; 
-        console.error('Error:', error); 
-    }
+  // --- 5. Event Handlers ---
 
-    // --- 游戏开始 ---
-    difficultyButtons.forEach(btn => btn.addEventListener('click', handleDifficultyChange));
-    languageButtons.forEach(btn => btn.addEventListener('click', handleLanguageChange));
+  function handleMainOptionClick(selectedId, selectedRef) {
+    if (state.gameState !== 'playing') return;
+    updateUIState('answered');
+    const mainQuestion = state.activePackage.mainQuestion;
+    const selectedButton = elements.optionsContainer.querySelector(`[data-id="${selectedId}"]`);
+
+    if (selectedId === mainQuestion.correctOptionId) {
+      state.correctStreak++;
+      showFeedback('✅ 正确!', 'green');
+      if (selectedButton) selectedButton.classList.add('correct');
+      setTimeout(loadNextPackage, 1000);
+    } else {
+      state.correctStreak = 0;
+      if (selectedButton) selectedButton.classList.add('incorrect');
+      showFeedback('❌ 答错了，我们一起来复习一下这节经文吧！', '#db7100');
+      const reviewQuestion = state.activePackage.reviewData[selectedRef];
+      setTimeout(() => displayReviewQuestion(reviewQuestion), 1500);
+    }
+    updateStreakDisplay();
+  }
+
+  function handleReviewClick(isCorrect) {
+    if (state.gameState !== 'reviewing') return;
+    updateUIState('answered');
+    if (isCorrect) {
+      showFeedback('👍 复习正确！现在回到主问题。', 'green');
+      setTimeout(displayMainQuestion, 1500);
+    } else {
+      showFeedback('不对哦，再仔细看看。', 'red');
+      setTimeout(() => updateUIState('reviewing'), 1000);
+    }
+  }
+
+  function loadNextPackage() {
+    if (state.prefetchBuffer) {
+      state.activePackage = state.prefetchBuffer;
+      state.prefetchBuffer = null;
+      displayMainQuestion();
+      prefetchNextPackage();
+    } else {
+      console.log("预取包尚不可用，重新开始加载...");
+      startGame();
+    }
+  }
+
+  function handleSettingChange(event, type) {
+    const selectedBtn = event.target;
+    const value = selectedBtn.dataset[type];
+
+    if (type === 'difficulty') state.currentDifficulty = value;
+    if (type === 'lang') state.currentLang = value;
+
+    state.correctStreak = 0;
+    updateStreakDisplay();
+    const buttons = type === 'difficulty' ? elements.difficultyButtons : elements.languageButtons;
+    buttons.forEach(btn => btn.classList.remove('active'));
+    selectedBtn.classList.add('active');
+
+    // 重置缓存并重新开始游戏
+    state.activePackage = null;
+    state.prefetchBuffer = null;
     startGame();
+  }
+
+  // --- 6. UI Helper Functions ---
+  function createButton(option, onClick) {
+    const button = document.createElement('button');
+    button.textContent = option.text;
+    if (option.id) button.dataset.id = option.id;
+    button.addEventListener('click', onClick);
+    return button;
+  }
+  
+  function updateStreakDisplay() {
+    elements.streakCounter.textContent = state.correctStreak;
+  }
+  
+  function showFeedback(message, color) {
+    elements.feedback.textContent = message;
+    elements.feedback.style.color = color;
+  }
+
+  function updateUIState(newState, title, text) {
+    state.gameState = newState;
+    const isInteractive = newState === 'playing' || newState === 'reviewing';
+    elements.optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = !isInteractive);
+    if(title) elements.title.textContent = title;
+    if(text) elements.text.textContent = text;
+    if(newState !== 'answered') elements.feedback.textContent = '';
+  }
+  
+  function handleError(error) {
+    console.error('An error occurred:', error);
+    updateUIState('error', '出错了!', error.message || '无法加载游戏数据，请刷新页面重试。');
+  }
+
+  // --- 7. Initialization ---
+  elements.difficultyButtons.forEach(btn => btn.addEventListener('click', (e) => handleSettingChange(e, 'difficulty')));
+  elements.languageButtons.forEach(btn => btn.addEventListener('click', (e) => handleSettingChange(e, 'lang')));
+  startGame();
 });
