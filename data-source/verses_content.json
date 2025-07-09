@@ -204,7 +204,7 @@
       "chapter": 1,
       "verse": "9",
       "text": {
-        "zh": "你要记住我的吩咐，要勇敢坚强，不要惊慌害怕，因为无论你去哪里，你的上帝 耶和华 都与你同在。”",
+        "zh": "你要记住我的吩咐，要勇敢坚强，不要惊慌害怕，因为无论你去哪里，你的上帝耶和华都与你同在。”",
         "en": "Have I not commanded you? Be courageous and strong. Do not be struck with terror or fear, for Jehovah your God is with you wherever you go.”"
       }
     },
@@ -213,7 +213,7 @@
       "chapter": 24,
       "verse": "15",
       "text": {
-        "zh": "你们要是认为敬奉 耶和华 不好，今天就只管选择你们要敬奉的：是你们的祖先在 大河 另一边敬奉的神也行，是本地 亚摩利 人的神也行。至于我和我一家，我们要敬奉 耶和华 。”",
+        "zh": "你们要是认为敬奉耶和华不好，今天就只管选择你们要敬奉的：是你们的祖先在 大河 另一边敬奉的神也行，是本地亚摩利人的神也行。至于我和我一家，我们要敬奉耶和华。”",
         "en": "Now if it seems bad to you to serve Jehovah, choose for yourselves today whom you will serve,whether the gods that your forefathers served on the other side of the Riveror the gods of the Amʹor·ites in whose land you are dwelling.But as for me and my household, we will serve Jehovah.”"
       }
     }
@@ -224,17 +224,8 @@
       "chapter": 2,
       "verse": "18",
       "text": {
-        "zh": "每当 耶和华 派士师来救他们， 耶和华 就与士师同在。士师在世的时候，上帝一直拯救 以色列 人脱离敌人的魔掌。因为他们被人压迫欺凌的时候悲伤叹息， 耶和华 就怜悯他们。",
+        "zh": "每当耶和华派士师来救他们，耶和华就与士师同在。士师在世的时候，上帝一直拯救以色列人脱离敌人的魔掌。因为他们被人压迫欺凌的时候悲伤叹息，耶和华就怜悯他们。",
         "en": "Whenever Jehovah did raise up judges for them,Jehovah would be with the judge and save them from the hand of their enemies all the days of the judge; for Jehovah was moved to pityover their groaning caused by those who oppressed themand those who were treating them abusively."
-      }
-    },
-    {
-      "id": "JDG_5_31",
-      "chapter": 5,
-      "verse": "31",
-      "text": {
-        "zh": "耶和华 啊，",
-        "en": "So let all your enemies perish,O Jehovah,"
       }
     },
     {
@@ -242,8 +233,17 @@
       "chapter": 6,
       "verse": "12",
       "text": {
-        "zh": "耶和华 的天使向 基甸 显现，说：“英勇的战士啊， 耶和华 与你同在。”",
+        "zh": "耶和华的天使向基甸显现，说：“英勇的战士啊，耶和华与你同在。”",
         "en": "Jehovah’s angel appeared to him and said: “Jehovah is with you,you mighty warrior.”"
+      }
+    },
+        {
+      "id": "JDG_21_25",
+      "chapter": 2,
+      "verse": "18",
+      "text": {
+        "zh": "在那个时代，以色列没有国王。人人都做自己认为对的事。",
+        "en": "In those days there was no king in Israel. Each one was doing what was right in his own eyes."
       }
     }
   ],
@@ -262,7 +262,7 @@
       "chapter": 2,
       "verse": "12",
       "text": {
-        "zh": "愿 耶和华 照你所做的奖赏你。你来投靠 以色列 的上帝 耶和华 ，留在他的翅膀底下，愿他给你十足的赏赐。”",
+        "zh": "愿耶和华照你所做的奖赏你。你来投靠以色列的上帝耶和华，留在他的翅膀底下，愿他给你十足的赏赐。”",
         "en": "May Jehovah reward you for what you have done,and may there be a perfect wagefor you from Jehovah the God of Israel, under whose wings you have come to seek refuge.”"
       }
     },
@@ -282,7 +282,7 @@
       "chapter": 15,
       "verse": "22",
       "text": {
-        "zh": "撒母耳 说：“ 耶和华 那么喜欢全烧祭和祭牲吗？耶和华 不是更喜欢人服从他的话吗？服从胜过献祭，听从命令胜过献上公羊的脂肪；",
+        "zh": "撒母耳 说：“耶和华那么喜欢全烧祭和祭牲吗？耶和华不是更喜欢人服从他的话吗？服从胜过献祭，听从命令胜过献上公羊的脂肪；",
         "en": "Samuel then said: “Does Jehovah take as much pleasure in burnt offerings and sacrificesas in obeying the voice of Jehovah? Look! To obey is better than a sacrifice,and to pay attention than the fatof rams;"
       }
     },
@@ -291,7 +291,7 @@
       "chapter": 16,
       "verse": "7",
       "text": {
-        "zh": "耶和华 对 撒母耳 说：“不要看他的外表和高大的身材，我不选他，因为上帝跟人不一样，人看的是外表， 耶和华 看的是内心。”",
+        "zh": "耶和华对 撒母耳 说：“不要看他的外表和高大的身材，我不选他，因为上帝跟人不一样，人看的是外表，耶和华看的是内心。”",
         "en": "But Jehovah said to Samuel: “Do not pay attention to his appearance and how tall he is,for I have rejected him. For the way man sees is not the way God sees, because mere man sees what appears to the eyes, but Jehovah sees into the heart.”"
       }
     },
@@ -300,7 +300,7 @@
       "chapter": 17,
       "verse": "45",
       "text": {
-        "zh": "大卫 对那个 非利士 人说：“你来攻击我，是靠刀剑枪矛，但我来攻击你，是奉天军的统帅 耶和华 的名。他是 以色列 军队的上帝，你辱骂的就是他。",
+        "zh": "大卫 对那个 非利士 人说：“你来攻击我，是靠刀剑枪矛，但我来攻击你，是奉天军的统帅耶和华的名。他是以色列军队的上帝，你辱骂的就是他。",
         "en": "David replied to the Phi·lisʹtine: “You are coming against me with sword and spear and javelin,but I am coming against you in the name of Jehovah of armies,the God of the battle line of Israel, whom you have taunted."
       }
     }
@@ -311,7 +311,7 @@
       "chapter": 7,
       "verse": "28",
       "text": {
-        "zh": "至高主宰 耶和华 啊，你是上帝，你的话真实可靠。你承诺把这些福分赐给你的仆人。",
+        "zh": "至高主宰耶和华啊，你是上帝，你的话真实可靠。你承诺把这些福分赐给你的仆人。",
         "en": "And now, O Sovereign Lord Jehovah, you are the true God, and your words are truth,and you have promised these good things to your servant."
       }
     },
@@ -358,7 +358,7 @@
       "chapter": 18,
       "verse": "21",
       "text": {
-        "zh": "以利亚 来到全体人民面前说：“你们三心二意，摇摆不定，要到什么时候呢？如果 耶和华 是真神，你们就该跟随他；如果 巴力 是真神，你们就该跟随 巴力 。”人民却一言不发。",
+        "zh": "以利亚 来到全体人民面前说：“你们三心二意，摇摆不定，要到什么时候呢？如果耶和华是真神，你们就该跟随他；如果 巴力 是真神，你们就该跟随 巴力 。”人民却一言不发。",
         "en": "Then E·liʹjah approached all the people and said: “How long will you be limping between two different opinions?If Jehovah is the true God, follow him;but if Baʹal is, follow him!” But the people did not say a word in answer to him."
       }
     }
@@ -369,7 +369,7 @@
       "chapter": 5,
       "verse": "15",
       "text": {
-        "zh": "乃缦 带着所有随从，回到上帝的使者那里，站在他面前，说：“现在我知道，除了 以色列 ，世上任何地方都没有真神。现在请收下仆人的礼物吧。”",
+        "zh": "乃缦 带着所有随从，回到上帝的使者那里，站在他面前，说：“现在我知道，除了以色列，世上任何地方都没有真神。现在请收下仆人的礼物吧。”",
         "en": "After that he went back to the man of the true God,he and all his entourage,and he stood before him and said: “Now I know that there is no God anywhere in all the earth but in Israel.Now accept, please, a giftfrom your servant.”"
       }
     },
@@ -378,7 +378,7 @@
       "chapter": 13,
       "verse": "23",
       "text": {
-        "zh": "耶和华 却因为他跟 亚伯拉罕 、 以撒 、 雅各 立的誓约，就恩待 以色列 人，怜悯他们，关心他们。他不想把他们消灭，到现在都还没有把他们从自己面前赶走。",
+        "zh": "耶和华却因为他跟 亚伯拉罕 、 以撒 、 雅各 立的誓约，就恩待以色列人，怜悯他们，关心他们。他不想把他们消灭，到现在都还没有把他们从自己面前赶走。",
         "en": "However, Jehovah extended favor and mercy to themand showed his concern for them for the sake of his covenant with Abraham,Isaac,and Jacob.He did not want to bring them to ruin, and he has not cast them away from his presence to this day."
       }
     },
@@ -387,7 +387,7 @@
       "chapter": 20,
       "verse": "5",
       "text": {
-        "zh": "“你回去对我子民的领袖 希西家 说：‘你祖先 大卫 的上帝 耶和华 说：“我已经听见你的祷告，看见你的眼泪。我要治好你，后天你就能上 耶和华 的圣殿。",
+        "zh": "“你回去对我子民的领袖 希西家 说：‘你祖先大卫的上帝耶和华说：“我已经听见你的祷告，看见你的眼泪。我要治好你，后天你就能上耶和华的圣殿。",
         "en": "“Go back and say to Hez·e·kiʹah, the leader of my people, ‘This is what Jehovah the God of David your forefather says: “I have heard your prayer. I have seen your tears.Here I am healing you.On the third day you will go up to the house of Jehovah."
       }
     }
@@ -398,7 +398,7 @@
       "chapter": 28,
       "verse": "9",
       "text": {
-        "zh": "“至于你，我的儿子 所罗门 ，你要认识你父亲的上帝，全心全意，欢欣快乐地敬奉他，因为 耶和华 能洞察所有人的心，辨明人的一切想法和动机。你寻求他，他就会让你找到；你离弃他，他就会永远放弃你。",
+        "zh": "“至于你，我的儿子 所罗门 ，你要认识你父亲的上帝，全心全意，欢欣快乐地敬奉他，因为耶和华能洞察所有人的心，辨明人的一切想法和动机。你寻求他，他就会让你找到；你离弃他，他就会永远放弃你。",
         "en": "“And you, Solʹo·mon my son, know the God of your father and serve him with a completeheartand with a delightfulsoul,for Jehovah searches through all hearts,and he discerns every inclination of the thoughts.If you search for him, he will let himself be found by you,but if you leave him, he will reject you forever."
       }
     },
@@ -407,7 +407,7 @@
       "chapter": 29,
       "verse": "11",
       "text": {
-        "zh": "耶和华 啊，尊贵、大能、华美、光彩、威严都是你的，因为天上地上的一切都是你的。 耶和华 啊，王国是你的。你是至高的，超越一切。",
+        "zh": "耶和华啊，尊贵、大能、华美、光彩、威严都是你的，因为天上地上的一切都是你的。耶和华啊，王国是你的。你是至高的，超越一切。",
         "en": "Yours, O Jehovah, are the greatnessand the mightinessand the beauty and the splendor and the majesty,for everything in the heavens and on the earth is yours.Yours is the kingdom, O Jehovah.You are the One exalting yourself as head over all."
       }
     },
@@ -436,7 +436,7 @@
       "chapter": 16,
       "verse": "9",
       "text": {
-        "zh": "耶和华 仔细观察全世界，要施展力量帮助全心忠于他的人。因为你做了这件愚蠢的事，从今以后，你会常常遭遇战祸。”",
+        "zh": "耶和华仔细观察全世界，要施展力量帮助全心忠于他的人。因为你做了这件愚蠢的事，从今以后，你会常常遭遇战祸。”",
         "en": "For the eyes of Jehovah are roving about through all the earthto show his strengthin behalf of those whose heart is complete towardhim.You have acted foolishly in this matter; from now on there will be wars against you.”"
       }
     },
@@ -445,7 +445,7 @@
       "chapter": 20,
       "verse": "17",
       "text": {
-        "zh": "这一次你们不用作战。要在各自的岗位上站好，看 耶和华 怎样拯救你们。 犹大 国和 耶路撒冷 城啊，不要害怕，不要惊慌，明天要出去迎敌， 耶和华 会与你们同在。’”",
+        "zh": "这一次你们不用作战。要在各自的岗位上站好，看耶和华怎样拯救你们。 犹大 国和 耶路撒冷 城啊，不要害怕，不要惊慌，明天要出去迎敌，耶和华会与你们同在。’”",
         "en": "You will not need to fight this battle. Take your position, stand still,and see the salvation of Jehovah in your behalf.O Judah and Jerusalem, do not be afraid or be terrified.Tomorrow go out against them, and Jehovah will be with you.’”"
       }
     }
@@ -456,7 +456,7 @@
       "chapter": 7,
       "verse": "10",
       "text": {
-        "zh": "以斯拉 心里做好准备，要查考 耶和华 的法律，加以遵守，要在 以色列 教导人认识其中的条例和判决。",
+        "zh": "以斯拉 心里做好准备，要查考耶和华的法律，加以遵守，要在以色列教导人认识其中的条例和判决。",
         "en": "Ezʹra had prepared his heartto consult the Law of Jehovah and to practice it,and to teach its regulations and judgments in Israel."
       }
     },
@@ -485,7 +485,7 @@
       "chapter": 1,
       "verse": "11",
       "text": {
-        "zh": "耶和华 啊，求你侧耳倾听仆人的祷告，倾听那些乐于敬畏你圣名的仆人的祷告。请你今天让仆人一切顺利，得到国王的怜悯。”",
+        "zh": "耶和华啊，求你侧耳倾听仆人的祷告，倾听那些乐于敬畏你圣名的仆人的祷告。请你今天让仆人一切顺利，得到国王的怜悯。”",
         "en": "O Jehovah, please, let your ear be attentive to the prayer of your servant and to the prayer of your servants who take delight in fearing your name, and please, grant success to your servant today, and may this man show me compassion.”"
       }
     },
@@ -503,7 +503,7 @@
       "chapter": 8,
       "verse": "10",
       "text": {
-        "zh": "尼希米 又对他们说：“你们去吃肥美的，喝甘甜的，也要把食物分给没有能力准备的人。今天是我们主的圣日，你们不要难过，因为 耶和华 赐的喜乐，就是你们的力量。”",
+        "zh": "尼希米 又对他们说：“你们去吃肥美的，喝甘甜的，也要把食物分给没有能力准备的人。今天是我们主的圣日，你们不要难过，因为耶和华赐的喜乐，就是你们的力量。”",
         "en": "He said to them: “Go, eat the choice thingsand drink what is sweet, and send portions of foodto those who have nothing prepared; for this day is holy to our Lord, and do not feel sad, for the joy of Jehovah is your stronghold.”"
       }
     }
@@ -581,7 +581,7 @@
       "chapter": 1,
       "verse": "2",
       "text": {
-        "zh": "他喜爱 耶和华 的法律，",
+        "zh": "他喜爱耶和华的法律，",
         "en": "But his delight is in the law of Jehovah,"
       }
     },
@@ -599,7 +599,7 @@
       "chapter": 23,
       "verse": "1",
       "text": {
-        "zh": "耶和华 是我的牧人，",
+        "zh": "耶和华是我的牧人，",
         "en": "Jehovah is my Shepherd."
       }
     },
@@ -617,7 +617,7 @@
       "chapter": 37,
       "verse": "4",
       "text": {
-        "zh": "你要因 耶和华 而满心喜乐，",
+        "zh": "你要因耶和华而满心喜乐，",
         "en": "Find exquisite delightin Jehovah,"
       }
     },
@@ -626,7 +626,7 @@
       "chapter": 37,
       "verse": "28",
       "text": {
-        "zh": "耶和华 喜爱公正，",
+        "zh": "耶和华喜爱公正，",
         "en": "For Jehovah loves justice,"
       }
     },
@@ -671,7 +671,7 @@
       "chapter": 55,
       "verse": "22",
       "text": {
-        "zh": "你要把重担卸给 耶和华，",
+        "zh": "你要把重担卸给耶和华，",
         "en": "Throw your burden on Jehovah,"
       }
     },
@@ -680,7 +680,7 @@
       "chapter": 68,
       "verse": "11",
       "text": {
-        "zh": "耶和华 下令，",
+        "zh": "耶和华下令，",
         "en": "Jehovah gives the command;"
       }
     },
@@ -698,7 +698,7 @@
       "chapter": 86,
       "verse": "5",
       "text": {
-        "zh": "耶和华 啊，你又良善，",
+        "zh": "耶和华啊，你又良善，",
         "en": "For you, O Jehovah, are goodand ready to forgive;"
       }
     },
@@ -716,7 +716,7 @@
       "chapter": 103,
       "verse": "8",
       "text": {
-        "zh": "耶和华 怜悯人，体恤人，",
+        "zh": "耶和华怜悯人，体恤人，",
         "en": "Jehovah is merciful and compassionate,"
       }
     },
@@ -752,7 +752,7 @@
       "chapter": 115,
       "verse": "16",
       "text": {
-        "zh": "天，是 耶和华 的天；",
+        "zh": "天，是耶和华的天；",
         "en": "As for the heavens, they belong to Jehovah,"
       }
     },
@@ -761,7 +761,7 @@
       "chapter": 118,
       "verse": "6",
       "text": {
-        "zh": "有 耶和华 在我身边，",
+        "zh": "有耶和华在我身边，",
         "en": "Jehovah is on my side; I will not be afraid."
       }
     },
@@ -797,7 +797,7 @@
       "chapter": 127,
       "verse": "1",
       "text": {
-        "zh": "要不是 耶和华",
+        "zh": "要不是耶和华",
         "en": "Unless Jehovah builds the house,"
       }
     },
@@ -817,7 +817,7 @@
       "chapter": 1,
       "verse": "7",
       "text": {
-        "zh": "敬畏 耶和华 是知识的开端，",
+        "zh": "敬畏耶和华是知识的开端，",
         "en": "The fear ofJehovah is the beginning of knowledge."
       }
     },
@@ -826,7 +826,7 @@
       "chapter": 3,
       "verse": "5",
       "text": {
-        "zh": "你要全心信赖 耶和华，",
+        "zh": "你要全心信赖耶和华，",
         "en": "Trust in Jehovahwith all your heart,"
       }
     },
@@ -853,7 +853,7 @@
       "chapter": 3,
       "verse": "12",
       "text": {
-        "zh": "因为 耶和华 责备",
+        "zh": "因为耶和华责备",
         "en": "For those whom Jehovah loves he reproves,"
       }
     },
@@ -943,7 +943,7 @@
       "chapter": 10,
       "verse": "22",
       "text": {
-        "zh": "耶和华 所赐的福使人富足，",
+        "zh": "耶和华所赐的福使人富足，",
         "en": "It is the blessing of Jehovah that makes one rich,"
       }
     },
@@ -1201,7 +1201,7 @@
       "chapter": 6,
       "verse": "8",
       "text": {
-        "zh": "接着我听见 耶和华 的声音，说：“我可以派谁去呢？谁愿意为我们去呢？”我说：“我在这里！请派我去！”",
+        "zh": "接着我听见耶和华的声音，说：“我可以派谁去呢？谁愿意为我们去呢？”我说：“我在这里！请派我去！”",
         "en": "Then I heard the voice of Jehovah saying: “Whom shall I send, and who will go for us?”And I said: “Here I am! Send me!”"
       }
     },
@@ -1228,7 +1228,7 @@
       "chapter": 40,
       "verse": "31",
       "text": {
-        "zh": "但仰望 耶和华 的人",
+        "zh": "但仰望耶和华的人",
         "en": "But those hoping in Jehovah will regain power."
       }
     },
@@ -1246,7 +1246,7 @@
       "chapter": 43,
       "verse": "10",
       "text": {
-        "zh": "耶和华 宣告：",
+        "zh": "耶和华宣告：",
         "en": "“You are my witnesses,”declares Jehovah,"
       }
     },
@@ -1311,7 +1311,7 @@
       "chapter": 10,
       "verse": "10",
       "text": {
-        "zh": "只有 耶和华 是真神，",
+        "zh": "只有耶和华是真神，",
         "en": "But Jehovah is truly God."
       }
     },
@@ -1320,7 +1320,7 @@
       "chapter": 10,
       "verse": "23",
       "text": {
-        "zh": "耶和华 啊，我清楚知道，",
+        "zh": "耶和华啊，我清楚知道，",
         "en": "I well know, O Jehovah, that man’s way does not belong to him."
       }
     },
@@ -1338,7 +1338,7 @@
       "chapter": 29,
       "verse": "11",
       "text": {
-        "zh": "“ 耶和华 说：‘我很清楚我想要为你们做什么，我要赐安宁，不是降灾祸，要让你们有前途有希望。",
+        "zh": "“耶和华说：‘我很清楚我想要为你们做什么，我要赐安宁，不是降灾祸，要让你们有前途有希望。",
         "en": "“‘For I well know the thoughts that I am thinking toward you,’ declares Jehovah, ‘thoughts of peace, and not of calamity,to give you a future and a hope."
       }
     }
@@ -1358,7 +1358,7 @@
       "chapter": 3,
       "verse": "25",
       "text": {
-        "zh": "耶和华 会善待仰望他、",
+        "zh": "耶和华会善待仰望他、",
         "en": "Good is Jehovah to the one hoping in him,to the personwho keeps seeking him."
       }
     },
@@ -1378,7 +1378,7 @@
       "chapter": 18,
       "verse": "32",
       "text": {
-        "zh": "“至高主宰 耶和华 宣告：‘我不喜欢任何人死亡。所以你们要回头并活下去。’”",
+        "zh": "“至高主宰耶和华宣告：‘我不喜欢任何人死亡。所以你们要回头并活下去。’”",
         "en": "“‘I do not take any pleasure in the death of anyone,’declares the Sovereign Lord Jehovah. ‘So turn back and live.’”"
       }
     },
@@ -1387,7 +1387,7 @@
       "chapter": 33,
       "verse": "11",
       "text": {
-        "zh": "你要告诉他们：‘至高主宰 耶和华 宣告：“我凭着我的永生发誓，我绝不喜欢邪恶的人死亡，却喜欢这样的人改过，得以活下去。 以色列 人啊，回头吧，回头改过吧，何必死亡呢？”’",
+        "zh": "你要告诉他们：‘至高主宰耶和华宣告：“我凭着我的永生发誓，我绝不喜欢邪恶的人死亡，却喜欢这样的人改过，得以活下去。以色列人啊，回头吧，回头改过吧，何必死亡呢？”’",
         "en": "Tell them, ‘“As surely as I am alive,” declares the Sovereign Lord Jehovah, “I take no pleasure in the death of the wicked,but rather that someone wicked changes his wayand keeps living.Turn back, turn back from your bad ways,for why should you die, O house of Israel?”’"
       }
     },
@@ -1396,7 +1396,7 @@
       "chapter": 38,
       "verse": "23",
       "text": {
-        "zh": "我一定会在列国眼前彰显为大，彰显为圣，使他们认识我，他们就知道我是 耶和华 。’”",
+        "zh": "我一定会在列国眼前彰显为大，彰显为圣，使他们认识我，他们就知道我是耶和华。’”",
         "en": "And I will certainly magnify myself and sanctify myself and make myself known before the eyes of many nations; and they will have to know that I am Jehovah.’"
       }
     }
@@ -1483,7 +1483,7 @@
       "chapter": 2,
       "verse": "32",
       "text": {
-        "zh": "所有呼求 耶和华 圣名的人，都会得救。",
+        "zh": "所有呼求耶和华圣名的人，都会得救。",
         "en": "And everyone who calls on the name of Jehovah will be saved;"
       }
     }
@@ -1494,7 +1494,7 @@
       "chapter": 3,
       "verse": "7",
       "text": {
-        "zh": "至高的主宰 耶和华 做任何事，",
+        "zh": "至高的主宰耶和华做任何事，",
         "en": "For the Sovereign Lord Jehovah will not do a thing"
       }
     },
@@ -1532,7 +1532,7 @@
       "chapter": 1,
       "verse": "15",
       "text": {
-        "zh": "耶和华 打击万国的日子",
+        "zh": "耶和华打击万国的日子",
         "en": "For the day of Jehovah against all the nations is near."
       }
     },
@@ -1610,7 +1610,7 @@
       "chapter": 1,
       "verse": "3",
       "text": {
-        "zh": "耶和华 力量强大，",
+        "zh": "耶和华力量强大，",
         "en": "Jehovah is slow to angerand great in power,"
       }
     },
@@ -1619,7 +1619,7 @@
       "chapter": 1,
       "verse": "7",
       "text": {
-        "zh": "耶和华 是良善的，",
+        "zh": "耶和华是良善的，",
         "en": "Jehovah is good,a stronghold in the day of distress."
       }
     },
@@ -1657,7 +1657,7 @@
       "chapter": 3,
       "verse": "18",
       "text": {
-        "zh": "我还是要因 耶和华 而欢跃，",
+        "zh": "我还是要因耶和华而欢跃，",
         "en": "Yet, as for me, I will exult in Jehovah;"
       }
     }
@@ -1686,7 +1686,7 @@
       "chapter": 3,
       "verse": "17",
       "text": {
-        "zh": "你的上帝 耶和华 就在你那里。",
+        "zh": "你的上帝耶和华就在你那里。",
         "en": "Jehovah your God is in your midst."
       }
     }
@@ -1697,7 +1697,7 @@
       "chapter": 1,
       "verse": "5",
       "text": {
-        "zh": "现在天军的统帅 耶和华 说：‘你们要用心反省自己的行为。",
+        "zh": "现在天军的统帅耶和华说：‘你们要用心反省自己的行为。",
         "en": "Now this is what Jehovah of armies says, ‘Set your heart onyour ways."
       }
     },
@@ -1706,7 +1706,7 @@
       "chapter": 2,
       "verse": "4",
       "text": {
-        "zh": "“ 耶和华 说：‘ 所罗巴伯 啊，你要坚强。 约萨答 的儿子大祭司 约书亚 啊，你也要坚强。’",
+        "zh": "“耶和华说：‘ 所罗巴伯 啊，你要坚强。 约萨答 的儿子大祭司 约书亚 啊，你也要坚强。’",
         "en": "“‘But now be strong, Ze·rubʹba·bel,’ declares Jehovah, ‘and be strong, Joshua son of Je·hozʹa·dak, the high priest.’"
       }
     },
@@ -1715,7 +1715,7 @@
       "chapter": 2,
       "verse": "7",
       "text": {
-        "zh": "“‘我要震动万国，万国的珍宝都会来到这座圣殿，我要使这里充满荣耀。’这是天军的统帅 耶和华 说的。",
+        "zh": "“‘我要震动万国，万国的珍宝都会来到这座圣殿，我要使这里充满荣耀。’这是天军的统帅耶和华说的。",
         "en": "“‘And I will shake all the nations, and the preciousthings of all the nations will come in;and I will fill this house with glory,’says Jehovah of armies."
       }
     }
@@ -1726,7 +1726,7 @@
       "chapter": 4,
       "verse": "6",
       "text": {
-        "zh": "于是他对我说：“ 耶和华 有话告诉 所罗巴伯 ：‘“不是依靠军队，不是依靠能力，而是依靠我的神圣力量，这些事才会发生。”这是天军的统帅 耶和华 说的。",
+        "zh": "于是他对我说：“耶和华有话告诉 所罗巴伯 ：‘“不是依靠军队，不是依靠能力，而是依靠我的神圣力量，这些事才会发生。”这是天军的统帅耶和华说的。",
         "en": "He then said to me: “This is the word of Jehovah to Ze·rubʹba·bel: ‘“Not by a military force, nor by power,but by my spirit,”says Jehovah of armies."
       }
     },
@@ -1744,7 +1744,7 @@
       "chapter": 8,
       "verse": "17",
       "text": {
-        "zh": "你们不要在心里图谋伤害别人，也不要喜爱虚假的誓言，因为我憎恨这一切。’这是 耶和华 宣告的。”",
+        "zh": "你们不要在心里图谋伤害别人，也不要喜爱虚假的誓言，因为我憎恨这一切。’这是耶和华宣告的。”",
         "en": "Do not scheme calamity against one another in your hearts,and do not love any false oath;for these are all things that I hate,’declares Jehovah.”"
       }
     }
@@ -1755,7 +1755,7 @@
       "chapter": 3,
       "verse": "1",
       "text": {
-        "zh": "“看！我要派我的使者出去，他会在我前面准备道路。你们寻求的主宰会忽然来到自己的圣殿，你们喜爱的立约使者也会一起来到。看！他一定会来。”这是天军的统帅 耶和华 说的。",
+        "zh": "“看！我要派我的使者出去，他会在我前面准备道路。你们寻求的主宰会忽然来到自己的圣殿，你们喜爱的立约使者也会一起来到。看！他一定会来。”这是天军的统帅耶和华说的。",
         "en": "“Look! I am sending my messenger, and he will clear upa way before me.And suddenly the true Lord, whom you are seeking, will come to his temple;and the messenger of the covenant will come, in whom you take delight. Look! He will certainly come,” says Jehovah of armies."
       }
     },
@@ -1764,7 +1764,7 @@
       "chapter": 3,
       "verse": "6",
       "text": {
-        "zh": "“我是 耶和华 ，我不会改变。你们是 雅各 的子孙，所以你们没有灭亡。",
+        "zh": "“我是耶和华，我不会改变。你们是 雅各 的子孙，所以你们没有灭亡。",
         "en": "“For I am Jehovah; I do not change.And you are sons of Jacob; you have not yet come to your finish."
       }
     },
@@ -1773,7 +1773,7 @@
       "chapter": 3,
       "verse": "10",
       "text": {
-        "zh": "你们要把十分之一奉献全部送进仓库，使我的圣殿里有食物。请你们这样试试我，看我会不会为你们打开天上的水闸，把福分全都倾注给你们，直到你们一无所缺。”这是天军的统帅 耶和华 说的。",
+        "zh": "你们要把十分之一奉献全部送进仓库，使我的圣殿里有食物。请你们这样试试我，看我会不会为你们打开天上的水闸，把福分全都倾注给你们，直到你们一无所缺。”这是天军的统帅耶和华说的。",
         "en": "Bring the entire titheinto the storehouse,so that there may be food in my house;and test me out, please, in this regard,” Jehovah of armies says, “to see whether I will not open to you the floodgates of the heavensand pour outon you a blessing until there is nothing lacking.”"
       }
     }
@@ -1784,7 +1784,7 @@
       "chapter": 4,
       "verse": "4",
       "text": {
-        "zh": "耶稣 却回答说：“圣经上写着：‘人活着不能只靠食物，也必须靠 耶和华 口里说的每一句话。’”",
+        "zh": "耶稣 却回答说：“圣经上写着：‘人活着不能只靠食物，也必须靠耶和华口里说的每一句话。’”",
         "en": "But he answered: “It is written: ‘Man must live, not on bread alone, but on every word that comes from Jehovah’s mouth.’”"
       }
     },
@@ -2000,7 +2000,7 @@
       "chapter": 22,
       "verse": "37",
       "text": {
-        "zh": "耶稣 对他说：“‘你要全心，全意，用全部生命爱 耶和华 你的上帝。’",
+        "zh": "耶稣 对他说：“‘你要全心，全意，用全部生命爱耶和华你的上帝。’",
         "en": "He said to him: “‘You must love Jehovah your God with your whole heart and with your whole soul and with your whole mind.’"
       }
     },
@@ -2092,7 +2092,7 @@
       "chapter": 12,
       "verse": "30",
       "text": {
-        "zh": "你要全心，全意，全力，用全部生命爱 耶和华 你的上帝’。",
+        "zh": "你要全心，全意，全力，用全部生命爱耶和华你的上帝’。",
         "en": "and you must love Jehovah your God with your whole heart and with your whole soul and with your whole mind and with your whole strength.’"
       }
     },
@@ -2287,7 +2287,7 @@
       "chapter": 13,
       "verse": "48",
       "text": {
-        "zh": "听见这番话的外族人就很高兴，赞叹耶和华 的话语。那些有正确的态度而可以得到永远生命的人，都成了信徒，",
+        "zh": "听见这番话的外族人就很高兴，赞叹耶和华的话语。那些有正确的态度而可以得到永远生命的人，都成了信徒，",
         "en": "When those of the nations heard this, they began to rejoice and to glorify the word of Jehovah, and all those who were rightly disposed for everlasting life became believers."
       }
     },
@@ -2388,7 +2388,7 @@
       "chapter": 10,
       "verse": "13",
       "text": {
-        "zh": "“所有呼求 耶和华圣名的人，都会得救。”",
+        "zh": "“所有呼求耶和华圣名的人，都会得救。”",
         "en": "For “everyone who calls on the name of Jehovah will be saved.”"
       }
     },
@@ -2877,7 +2877,7 @@
       "chapter": 3,
       "verse": "13",
       "text": {
-        "zh": "无论谁有理由对人不满，都要继续彼此包容，彼此甘心宽恕。 耶和华怎样甘心宽恕了你们，你们也要怎样甘心宽恕人。",
+        "zh": "无论谁有理由对人不满，都要继续彼此包容，彼此甘心宽恕。耶和华怎样甘心宽恕了你们，你们也要怎样甘心宽恕人。",
         "en": "Continue putting up with one another and forgiving one another freelyeven if anyone has a cause for complaint against another.Just as Jehovah freely forgave you, you must also do the same."
       }
     },
@@ -2895,7 +2895,7 @@
       "chapter": 3,
       "verse": "23",
       "text": {
-        "zh": "你们无论做什么，都要尽心竭力，就像为 耶和华而做，不是为人而做，",
+        "zh": "你们无论做什么，都要尽心竭力，就像为耶和华而做，不是为人而做，",
         "en": "Whatever you are doing, work at it whole-souled as for Jehovah,and not for men,"
       }
     }
@@ -2915,7 +2915,7 @@
       "chapter": 5,
       "verse": "2",
       "text": {
-        "zh": "因为你们自己清楚知道， 耶和华的日子来到，就像窃贼在夜里来到一样。",
+        "zh": "因为你们自己清楚知道，耶和华的日子来到，就像窃贼在夜里来到一样。",
         "en": "For you yourselves know very well that Jehovah’s dayis coming exactly as a thief in the night."
       }
     },
@@ -2962,7 +2962,7 @@
       "chapter": 3,
       "verse": "1",
       "text": {
-        "zh": "最后，弟兄们，请你们继续为我们祷告，祈求 耶和华的话语能迅速传开，受到尊崇，就像在你们那边的情形一样。",
+        "zh": "最后，弟兄们，请你们继续为我们祷告，祈求耶和华的话语能迅速传开，受到尊崇，就像在你们那边的情形一样。",
         "en": "Finally, brothers, carry on prayer for us,that the word of Jehovah may keep spreading rapidlyand being glorified, just as it is with you,"
       }
     },
@@ -3251,7 +3251,7 @@
       "chapter": 13,
       "verse": "6",
       "text": {
-        "zh": "因此，我们可以勇气十足地说：“有 耶和华帮助我，我绝不害怕。人能把我怎么样？”",
+        "zh": "因此，我们可以勇气十足地说：“有耶和华帮助我，我绝不害怕。人能把我怎么样？”",
         "en": "So that we may be of good courage and say: “Jehovahis my helper; I will not be afraid. What can man do to me?”"
       }
     },
@@ -3289,7 +3289,7 @@
       "chapter": 1,
       "verse": "7",
       "text": {
-        "zh": "这样的人不要以为可以从 耶和华那里得到什么。",
+        "zh": "这样的人不要以为可以从耶和华那里得到什么。",
         "en": "In fact, that man should not expect to receive anything from Jehovah;"
       }
     },
@@ -3670,7 +3670,7 @@
       "chapter": 1,
       "verse": "9",
       "text": {
-        "zh": "天使长米迦勒跟魔鬼冲突，为 摩西 的遗体争论的时候，还不敢说侮辱的话，定他的罪，只说：“愿 耶和华斥责你。”",
+        "zh": "天使长米迦勒跟魔鬼冲突，为 摩西 的遗体争论的时候，还不敢说侮辱的话，定他的罪，只说：“愿耶和华斥责你。”",
         "en": "But when Miʹcha·elthe archangelhad a difference with the Devil and was disputing about Moses’ body,he did not dare to bring a judgment against him in abusive terms,but said: “May Jehovahrebuke you.”"
       }
     },
@@ -3699,7 +3699,7 @@
       "chapter": 4,
       "verse": "11",
       "text": {
-        "zh": "“ 耶和华我们的上帝，你配受荣耀、尊崇、力量，因为你创造了一切，一切都是因为你的旨意才能存在，才被创造的。”",
+        "zh": "“耶和华我们的上帝，你配受荣耀、尊崇、力量，因为你创造了一切，一切都是因为你的旨意才能存在，才被创造的。”",
         "en": "“You are worthy, Jehovahour God, to receive the gloryand the honorand the power,because you created all things,and because of your will they came into existence and were created.”"
       }
     },

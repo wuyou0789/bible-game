@@ -10,6 +10,11 @@ main = "functions/api/[[path]].js"
 # id = "952c07ba2f4448e98dd5d24b51f3fb2a"
 
 # 绑定R2存储桶
-[[r2_buckets]]
-binding = "BIBLE_DATA_BUCKET"
-bucket_name = "bible-game-verses"
+# [[r2_buckets]]
+# binding = "BIBLE_DATA_BUCKET"
+# bucket_name = "bible-game-verses"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bible-db"
+database_id = "9ee88263-d025-4266-875a-83020380932c"

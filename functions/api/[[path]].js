@@ -1,42 +1,9 @@
-// functions/api/[[path]].js (The Ultimate All-in-Memory/File-based Worker)
+// functions/api/[[path]].js (The Ultimate D1-Powered Worker - Correct Binding)
 
-// --- 【核心改动】直接从项目文件导入JSON数据 ---
-// Cloudflare Pages在部署时，会自动将这些文件打包进Worker函数中
-import versesByBook from '../../data-source/verses_content.json';
-import bookNames from '../../data-source/book_names.json';
+// --- 导入我们的“题库包” ---
+import gamePacks from '../../data-source/game-packs.json';
 
-
-// --- 全局缓存，我们唯一的“数据库” ---
-// 这些变量只会在Worker第一次被请求时（冷启动）填充一次
-let allVersesById = null;
-let idLookupTable = null;
-
-/**
- * 优雅的初始化函数
- * @param {object} env - Worker的环境变量，包含R2绑定
- */
-function initialize() {
-    console.log("[Worker] Cold start: Initializing all data into memory from imported JSON files...");
-    
-    const lookupTable = {};
-    const versesMap = {};
-
-    for (const bookId in versesByBook) {
-        if (!versesByBook[bookId] || !Array.isArray(versesByBook[bookId])) continue;
-        
-        lookupTable[bookId] = versesByBook[bookId].map(verse => {
-            versesMap[verse.id] = verse; // 用ID作为Key，存下整个经文对象
-            return verse.id;
-        });
-    }
-
-    idLookupTable = lookupTable;
-    allVersesById = versesMap;
-
-    console.log(`[Worker] Initialization complete. ${Object.keys(allVersesById).length} verses loaded into memory.`);
-}
-
-// --- 辅助函数 (保持不变) ---
+// --- 辅助函数：洗牌算法 ---
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -44,127 +11,150 @@ function shuffleArray(array) {
     }
 }
 
-function selectIdsBasedOnDifficulty(difficulty, localIdLookupTable) {
-    const allBookIds = Object.keys(localIdLookupTable);
-    const correctBookId = allBookIds[Math.floor(Math.random() * allBookIds.length)];
-    const versesInCorrectBook = localIdLookupTable[correctBookId];
-    if (!versesInCorrectBook || versesInCorrectBook.length === 0) {
-        return selectIdsBasedOnDifficulty(difficulty, localIdLookupTable);
+/**
+ * 从一个数组中安全地随机挑选指定数量的唯一元素
+ * @param {Array} arr - 源数组
+ * @param {number} numItems - 要挑选的数量
+ * @returns {Array} 包含随机元素的数组
+ */
+function getRandomItems(arr, numItems) {
+    if (arr.length < numItems) {
+        return [...arr];
     }
-    const correctId = versesInCorrectBook[Math.floor(Math.random() * versesInCorrectBook.length)];
-
-    const sameBookDistractions = versesInCorrectBook.filter(id => id !== correctId);
-    const otherBookIds = allBookIds.filter(id => id !== correctBookId);
-    let otherBookDistractions = otherBookIds.map(bookId => localIdLookupTable[bookId]).flat();
-    
-    shuffleArray(sameBookDistractions);
-    shuffleArray(otherBookDistractions);
-
-    let distractionIds = [];
-    switch (difficulty) {
-        case 'hard':
-            distractionIds.push(...sameBookDistractions.slice(0, 2));
-            distractionIds.push(...otherBookDistractions.slice(0, 1));
-            break;
-        case 'medium':
-            distractionIds.push(...sameBookDistractions.slice(0, 1));
-            distractionIds.push(...otherBookDistractions.slice(0, 2));
-            break;
-        default: // easy
-            distractionIds.push(...otherBookDistractions.slice(0, 3));
-            break;
-    }
-    
-    let allDistractions = [...sameBookDistractions, ...otherBookDistractions];
-    let i = 0;
-    while (distractionIds.length < 3 && i < allDistractions.length) {
-        const randomDistraction = allDistractions[i];
-        if (!distractionIds.includes(randomDistraction) && randomDistraction !== correctId) {
-            distractionIds.push(randomDistraction);
-        }
-        i++;
-    }
-    
-    return [correctId, ...distractionIds.slice(0, 3)];
+    const shuffled = [...arr];
+    shuffleArray(shuffled);
+    return shuffled.slice(0, numItems);
 }
 
 
 // --- 统一的请求处理入口 ---
-export async function onRequest(context) {
-    // 【关键】这个模式下，我们不再需要env了
-    const { request } = context;
-    const url = new URL(request.url);
-    const lang = url.searchParams.get('lang') || 'zh';
+export default {
+    async fetch(request, env, ctx) {
+        const url = new URL(request.url);
+        const lang = url.searchParams.get('lang') || 'zh';
 
-    try {
-        // 如果内存缓存为空（冷启动），则执行初始化
-        // ▼▼▼▼▼▼▼▼▼▼ 核心修复点 ▼▼▼▼▼▼▼▼▼▼
-        // 我们不再需要从R2初始化，因为数据已经通过import导入了
-        if (!idLookupTable) {
-            initialize();
-        }
-        // ▲▲▲▲▲▲▲▲▲▲ 修复结束 ▲▲▲▲▲▲▲▲▲▲
+        try {
+            // --- API 路由器：根据路径决定做什么 ---
+            if (url.pathname.endsWith('/new-question')) {
+                // --- 处理主问题请求 ---
+                const theme = url.searchParams.get('theme') || 'default';
+                const difficulty = url.searchParams.get('difficulty') || 'easy';
+                
+                const versePool = gamePacks[theme] || gamePacks['default'];
+                if (versePool.length < 4) {
+                    throw new Error(`Theme "${theme}" has fewer than 4 verses.`);
+                }
 
-        let responseData;
+                const correctRef = getRandomItems(versePool, 1)[0];
+                const correctBookId = correctRef.split('_')[0];
 
-        // --- 简单的API路由器 ---
-        if (url.pathname.endsWith('/new-question')) {
-            const difficulty = url.searchParams.get('difficulty') || 'easy';
-            const finalIds = selectIdsBasedOnDifficulty(difficulty, idLookupTable);
-            const correctId = finalIds[0];
-            const correctVerseDetails = allVersesById[correctId];
-            
-            let options = finalIds.map(id => {
-                const verseData = allVersesById[id];
-                const bookId = id.split('_')[0];
-                const verseDisplay = verseData.verse.replace(/-/g, '–');
-                return { id: id, text: `${bookNames[lang][bookId]} ${verseData.chapter}:${verseDisplay}` };
-            });
-            shuffleArray(options);
+                const sameBookDistractionsPool = versePool.filter(ref => ref.startsWith(correctBookId + '_') && ref !== correctRef);
+                const otherBookDistractionsPool = versePool.filter(ref => !ref.startsWith(correctBookId + '_'));
+                
+                let distractionRefs = [];
+                switch (difficulty) {
+                    case 'hard':
+                        distractionRefs.push(...getRandomItems(sameBookDistractions, 2));
+                        distractionRefs.push(...getRandomItems(otherBookDistractions, 1));
+                        break;
+                    case 'medium':
+                        distractionRefs.push(...getRandomItems(sameBookDistractions, 1));
+                        distractionRefs.push(...getRandomItems(otherBookDistractions, 2));
+                        break;
+                    default: // easy
+                        distractionRefs.push(...getRandomItems(otherBookDistractions, 3));
+                        break;
+                }
+                
+                let allDistractionsPool = [...otherBookDistractions, ...sameBookDistractions];
+                let i = 0;
+                while (distractionRefs.length < 3 && i < allDistractionsPool.length) {
+                    const randomRef = allDistractionsPool[i];
+                    if (!distractionRefs.includes(randomRef) && randomRef !== correctRef) {
+                        distractionRefs.push(randomRef);
+                    }
+                    i++;
+                }
+                distractionRefs = distractionRefs.slice(0, 3);
 
-            responseData = {
-                promptVerseText: correctVerseDetails.text[lang],
-                options: options,
-                correctOptionId: correctId
-            };
+                const finalRefs = [correctRef, ...distractionRefs];
+                
+                // ▼▼▼▼▼▼▼▼▼▼ 【核心修正】使用正确的绑定名 DB ▼▼▼▼▼▼▼▼▼▼
+                const placeholders = finalRefs.map(() => '?').join(',');
+                const query = `SELECT * FROM verses WHERE verse_ref IN (${placeholders}) AND lang = ?`;
+                const stmt = env.DB.prepare(query).bind(...finalRefs, lang);
+                // ▲▲▲▲▲▲▲▲▲▲ 修正结束 ▲▲▲▲▲▲▲▲▲▲
+                const { results } = await stmt.all();
 
-        } else if (url.pathname.endsWith('/review-question')) {
-            const verseIdToReview = url.searchParams.get('verseId');
-            if (!verseIdToReview) return new Response(JSON.stringify({ error: 'verseId parameter is required' }), { status: 400 });
+                if (!results || results.length < 4) {
+                    throw new Error(`Could not fetch all required verses from D1 for refs: ${finalRefs.join(', ')}`);
+                }
 
-            const allIds = Object.keys(allVersesById);
-            const distractionIds = new Set();
-            while (distractionIds.size < 2) {
-                const randomId = allIds[Math.floor(Math.random() * allIds.length)];
-                if (randomId !== verseIdToReview) distractionIds.add(randomId);
+                const correctVerseDetails = results.find(v => v.verse_ref === correctRef);
+
+                let options = results.map(verse => ({
+                    id: verse.verse_ref,
+                    text: `${verse.book_name} ${verse.chapter}:${verse.verse_num.replace(/-/g, '–')}`
+                }));
+                shuffleArray(options);
+
+                const responseData = {
+                    promptVerseText: correctVerseDetails.text,
+                    options: options,
+                    correctOptionId: correctRef
+                };
+                
+                return new Response(JSON.stringify(responseData));
+
+            } else if (url.pathname.endsWith('/review-question')) {
+                // --- 处理复习题请求 ---
+                const verseIdToReview = url.searchParams.get('verseId');
+                if (!verseIdToReview) return new Response(JSON.stringify({ error: 'verseId parameter is required' }), { status: 400 });
+
+                // ▼▼▼▼▼▼▼▼▼▼ 【核心修正】使用正确的绑定名 DB ▼▼▼▼▼▼▼▼▼▼
+                const stmtDistractors = env.DB.prepare(
+                    `SELECT * FROM verses WHERE verse_ref != ?1 AND lang = ?2 ORDER BY RANDOM() LIMIT 2`
+                ).bind(verseIdToReview, lang);
+                
+                const stmtReview = env.DB.prepare(
+                    `SELECT * FROM verses WHERE verse_ref = ?1 AND lang = ?2`
+                ).bind(verseIdToReview, lang);
+                // ▲▲▲▲▲▲▲▲▲▲ 修正结束 ▲▲▲▲▲▲▲▲▲▲
+
+                const [distractorsResult, reviewResult] = await Promise.all([
+                    stmtDistractors.all(),
+                    reviewResult.first()
+                ]);
+
+                const distractors = distractorsResult.results;
+                const correctVerseData = reviewResult;
+
+                if (!correctVerseData || distractors.length < 2) {
+                    throw new Error(`Could not fetch data for review question: ${verseIdToReview}`);
+                }
+
+                let options = [
+                    { text: correctVerseData.text, isCorrect: true },
+                    ...distractors.map(d => ({ text: d.text, isCorrect: false }))
+                ];
+                shuffleArray(options);
+
+                const responseData = {
+                    questionText: `${correctVerseData.book_name} ${correctVerseData.chapter}:${correctVerseData.verse_num.replace(/-/g, '–')}`,
+                    options: options
+                };
+
+                return new Response(JSON.stringify(responseData));
             }
 
-            const finalIds = [verseIdToReview, ...Array.from(distractionIds)];
-            const correctVerseData = allVersesById[verseIdToReview];
-
-            let options = finalIds.map(id => ({
-                text: allVersesById[id].text[lang],
-                isCorrect: id === verseIdToReview
-            }));
-            shuffleArray(options);
-
-            const bookIdForReview = verseIdToReview.split('_')[0];
-            responseData = {
-                questionText: `${bookNames[lang][bookIdForReview]} ${correctVerseData.chapter}:${correctVerseData.verse.replace(/-/g, '–')}`,
-                options: options
-            };
-
-        } else {
             return new Response("API endpoint not found", { status: 404 });
+
+        } catch (error) {
+            console.error("Error in onRequest:", error);
+            return new Response(JSON.stringify({ error: 'Failed to process request', details: error.message, stack: error.stack }), { 
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
         }
-
-        return new Response(JSON.stringify(responseData));
-
-    } catch (error) {
-        console.error("Error in onRequest:", error);
-        return new Response(JSON.stringify({ error: 'Failed to process request', details: error.message, stack: error.stack }), { 
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
     }
-}
+};
