@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // --- 3. Core Game Flow ---
-
   /**
    * Initializes the game: fetches book names and the first question package.
    */
@@ -95,13 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (state.isLoadingNext || state.prefetchBuffer) return;
 
     state.isLoadingNext = true;
+    /**
     console.log("...后台正在预取下一超级包...");
+                 */
 
     fetchFullQuestionPackage()
       .then((pkg) => {
         if (pkg) {
           state.prefetchBuffer = pkg;
+          /**
           console.log("✅ 下一超级包已就绪！");
+             */
         }
       })
       .catch((error) => {

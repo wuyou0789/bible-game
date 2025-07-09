@@ -119,9 +119,9 @@ button.incorrect { background-color: #f8d7da; border-color: #f5c6cb; color: #721
     color: #6c757d;
     font-size: 0.9rem;
     background-color: #f8f9fa;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.4rem;
     border-radius: 20px;
-    width: 120px;
+    width: 100px;
     text-align: center;
 }
 
@@ -138,7 +138,7 @@ button.incorrect { background-color: #f8d7da; border-color: #f5c6cb; color: #721
     flex-direction: column;
     gap: 0.75rem;
     align-items: center;
-    width: 100%;
+ /*    width: 100%;     */
 }
 
 .lang-btn {

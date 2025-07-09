@@ -46,8 +46,8 @@ async function handleGetFullQuestion(url, env) {
   shuffleArray(otherBookDistractionsPool);
 
   let mainDistractionRefs = [];
-  if (difficulty === 'hard') mainDistractionRefs.push(...sameBookDistractionsPool.slice(0, 2));
-  else if (difficulty === 'medium') mainDistractionRefs.push(...sameBookDistractionsPool.slice(0, 1));
+  if (difficulty === 'hard') mainDistractionRefs.push(...sameBookDistractionsPool.slice(0, 3));
+  else if (difficulty === 'medium') mainDistractionRefs.push(...sameBookDistractionsPool.slice(0, 2));
   mainDistractionRefs.push(...otherBookDistractionsPool);
   mainDistractionRefs = mainDistractionRefs.slice(0, 3);
   mainDistractionRefs.forEach(ref => allNeededRefs.add(ref));
