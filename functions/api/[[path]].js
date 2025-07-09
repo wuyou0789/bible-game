@@ -1,34 +1,8 @@
-// functions/api/[[path]].js (The Ultimate D1 & R2 Powered Worker)
+// functions/api/[[path]].js (The Ultimate D1 & R2 Powered Worker - Production Ready)
 
 // --- 全局缓存 ---
 // 在Worker的生命周期内，这些变量只会在冷启动时被填充一次
 let gamePacks = null;
-let bookNames = null;
-
-/**
- * 优雅的初始化函数
- * 在Worker冷启动时，从R2一次性读取所有数据并加载到内存中
- * @param {object} env - Worker的环境变量，包含D1和R2的绑定
- */
-async function initialize(env) {
-    console.log("[Worker] Cold start: Initializing data from R2...");
-    
-    // 并行地从R2获取两个核心JSON文件
-    const [gamePacksObj, bookNamesObj] = await Promise.all([
-        env.BIBLE_DATA_BUCKET.get('game-packs.json'),
-        env.BIBLE_DATA_BUCKET.get('book_names.json')
-    ]);
-
-    // 健壮性检查，确保文件存在
-    if (!gamePacksObj) throw new Error("FATAL: 'game-packs.json' not found in R2 bucket. Please run the seed command.");
-    if (!bookNamesObj) throw new Error("FATAL: 'book_names.json' not found in R2 bucket. Please run the seed command.");
-
-    gamePacks = await gamePacksObj.json();
-    bookNames = await bookNamesObj.json();
-
-    console.log("[Worker] Initialization complete. Game data loaded into memory.");
-}
-
 
 // --- 辅助函数：洗牌算法 ---
 function shuffleArray(array) {
@@ -40,9 +14,6 @@ function shuffleArray(array) {
 
 /**
  * 从一个数组中安全地随机挑选指定数量的唯一元素
- * @param {Array} arr - 源数组
- * @param {number} numItems - 要挑选的数量
- * @returns {Array} 包含随机元素的数组
  */
 function getRandomItems(arr, numItems) {
     if (!arr || arr.length < numItems) {
@@ -63,52 +34,67 @@ export default {
         const lang = url.searchParams.get('lang') || 'zh';
 
         try {
-            // --- 在冷启动时，从R2获取题库包和书卷名 ---
-            if (!gamePacks || !bookNames) {
-                await initialize(env);
+            // 1. 检查D1数据库绑定是否存在
+            if (!env.DB) {
+                throw new Error("Server Configuration Error: D1 database binding 'DB' not found. Please check your Pages project settings.");
             }
-
+            // 2. 检查R2存储桶绑定是否存在
+            if (!env.BIBLE_DATA_BUCKET) {
+                throw new Error("Server Configuration Error: R2 bucket binding 'BIBLE_DATA_BUCKET' not found. Please check your Pages project settings.");
+            }
+            
+            // --- 在冷启动时，从R2获取题库包 ---
+            if (!gamePacks) {
+                console.log("[Worker] Cold start: Initializing game packs from R2...");
+                const gamePacksObj = await env.BIBLE_DATA_BUCKET.get('game-packs.json');
+                if (!gamePacksObj) {
+                    throw new Error("FATAL: 'game-packs.json' not found in R2 bucket. Please ensure the file is uploaded.");
+                }
+                try {
+                    gamePacks = await gamePacksObj.json();
+                } catch (e) {
+                    throw new Error("FATAL: Failed to parse 'game-packs.json'. Check the file for syntax errors.");
+                }
+                console.log("[Worker] Game packs loaded into memory.");
+            }
+            
             // --- API 路由器：根据路径决定做什么 ---
             if (url.pathname.endsWith('/new-question')) {
-                // --- 处理主问题请求 ---
                 const theme = url.searchParams.get('theme') || 'default';
                 const difficulty = url.searchParams.get('difficulty') || 'easy';
                 
                 const versePool = gamePacks[theme] || gamePacks['default'];
-                if (versePool.length < 10) { // 确保题库足够大以生成题目包
+                if (versePool.length < 10) {
                     throw new Error(`Theme "${theme}" has fewer than 10 verses required for a full bundle.`);
                 }
 
-                // 1. 挑选出本轮游戏需要的所有ID
                 const selectedRefs = getRandomItems(versePool, 10);
                 const mainQuestionRef = selectedRefs[0];
                 const mainDistractionRefs = selectedRefs.slice(1, 4);
                 const reviewDistractionPool = selectedRefs.slice(4);
 
-                // 2. 使用这10个ID，向D1进行一次高效的批量查询
-                const placeholders = selectedRefs.map(() => '?').join(',');
+                const allNeededRefs = [mainQuestionRef, ...mainDistractionRefs, ...reviewDistractionPool];
+                
+                const placeholders = allNeededRefs.map(() => '?').join(',');
                 const query = `SELECT * FROM verses WHERE verse_ref IN (${placeholders}) AND lang = ?`;
-                const stmt = env.DB.prepare(query).bind(...selectedRefs, lang);
+                const stmt = env.DB.prepare(query).bind(...allNeededRefs, lang);
                 const { results: verseDetails } = await stmt.all();
 
-                if (!verseDetails || verseDetails.length < selectedRefs.length) {
-                    throw new Error(`Could not fetch all required verses from D1.`);
+                if (!verseDetails || verseDetails.length < allNeededRefs.length) {
+                    throw new Error(`Could not fetch all required verses from D1. Check if all verse_refs in game-packs.json exist in the database for lang '${lang}'.`);
                 }
                 
                 const verseDetailsMap = new Map(verseDetails.map(v => [v.verse_ref, v]));
 
-                // 3. 组装主问题选项
                 let mainOptions = [mainQuestionRef, ...mainDistractionRefs].map(ref => {
                     const verse = verseDetailsMap.get(ref);
                     return { id: verse.verse_ref, text: `${verse.book_name} ${verse.chapter}:${verse.verse_num.replace(/-/g, '–')}` };
                 });
                 shuffleArray(mainOptions);
 
-                // 4. 为每个主干扰项，准备好它们的复习题
                 const reviewQuestions = {};
                 mainDistractionRefs.forEach((distractionRef, index) => {
                     const correctReviewVerse = verseDetailsMap.get(distractionRef);
-                    // 从备用池里为它分配2个复习干扰项
                     const reviewDistractors = reviewDistractionPool.slice(index * 2, index * 2 + 2);
                     
                     let reviewOptions = [
@@ -126,7 +112,6 @@ export default {
                     };
                 });
 
-                // 5. 组装最终的“题目包”
                 const correctVerseDetails = verseDetailsMap.get(mainQuestionRef);
                 const questionBundle = {
                     mainQuestion: {
@@ -136,7 +121,7 @@ export default {
                     },
                     reviewQuestions: reviewQuestions
                 };
-
+                
                 return new Response(JSON.stringify(questionBundle));
 
             } else {
@@ -144,8 +129,13 @@ export default {
             }
 
         } catch (error) {
-            console.error("Error in fetch handler:", error);
-            return new Response(JSON.stringify({ error: 'Failed to process request', details: error.message, stack: error.stack }), { 
+            console.error("Error in onRequest:", error);
+            // 返回一个包含明确错误信息的JSON，方便前端调试
+            return new Response(JSON.stringify({ 
+                error: 'Failed to process request', 
+                details: error.message, 
+                stack: error.stack // 在开发中很有用
+            }), { 
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
             });
