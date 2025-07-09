@@ -1,6 +1,7 @@
-// functions/api/[[path]].js (The Ultimate D1-Powered Worker - Correct Binding)
+// functions/api/[[path]].js (The Ultimate D1 & File-based Worker)
 
-// --- 导入我们的“题库包” ---
+// --- 【核心改动】直接从项目文件导入“题库包”JSON数据 ---
+// Cloudflare Pages在部署时，会自动将这个文件打包进Worker函数中
 import gamePacks from '../../data-source/game-packs.json';
 
 // --- 辅助函数：洗牌算法 ---
@@ -18,8 +19,11 @@ function shuffleArray(array) {
  * @returns {Array} 包含随机元素的数组
  */
 function getRandomItems(arr, numItems) {
-    if (arr.length < numItems) {
-        return [...arr];
+    if (!arr || arr.length < numItems) {
+        // 如果源数组不够长，就返回所有元素
+        const shuffled = [...(arr || [])];
+        shuffleArray(shuffled);
+        return shuffled;
     }
     const shuffled = [...arr];
     shuffleArray(shuffled);
@@ -40,6 +44,7 @@ export default {
                 const theme = url.searchParams.get('theme') || 'default';
                 const difficulty = url.searchParams.get('difficulty') || 'easy';
                 
+                // 【改动】直接使用导入的 gamePacks 对象
                 const versePool = gamePacks[theme] || gamePacks['default'];
                 if (versePool.length < 4) {
                     throw new Error(`Theme "${theme}" has fewer than 4 verses.`);
@@ -70,7 +75,7 @@ export default {
                 let i = 0;
                 while (distractionRefs.length < 3 && i < allDistractionsPool.length) {
                     const randomRef = allDistractionsPool[i];
-                    if (!distractionRefs.includes(randomRef) && randomRef !== correctRef) {
+                    if (randomRef && !distractionRefs.includes(randomRef) && randomRef !== correctRef) {
                         distractionRefs.push(randomRef);
                     }
                     i++;
@@ -79,11 +84,9 @@ export default {
 
                 const finalRefs = [correctRef, ...distractionRefs];
                 
-                // ▼▼▼▼▼▼▼▼▼▼ 【核心修正】使用正确的绑定名 DB ▼▼▼▼▼▼▼▼▼▼
                 const placeholders = finalRefs.map(() => '?').join(',');
                 const query = `SELECT * FROM verses WHERE verse_ref IN (${placeholders}) AND lang = ?`;
                 const stmt = env.DB.prepare(query).bind(...finalRefs, lang);
-                // ▲▲▲▲▲▲▲▲▲▲ 修正结束 ▲▲▲▲▲▲▲▲▲▲
                 const { results } = await stmt.all();
 
                 if (!results || results.length < 4) {
@@ -107,11 +110,10 @@ export default {
                 return new Response(JSON.stringify(responseData));
 
             } else if (url.pathname.endsWith('/review-question')) {
-                // --- 处理复习题请求 ---
+                // --- 处理复习题请求 (逻辑不变) ---
                 const verseIdToReview = url.searchParams.get('verseId');
                 if (!verseIdToReview) return new Response(JSON.stringify({ error: 'verseId parameter is required' }), { status: 400 });
 
-                // ▼▼▼▼▼▼▼▼▼▼ 【核心修正】使用正确的绑定名 DB ▼▼▼▼▼▼▼▼▼▼
                 const stmtDistractors = env.DB.prepare(
                     `SELECT * FROM verses WHERE verse_ref != ?1 AND lang = ?2 ORDER BY RANDOM() LIMIT 2`
                 ).bind(verseIdToReview, lang);
@@ -119,7 +121,6 @@ export default {
                 const stmtReview = env.DB.prepare(
                     `SELECT * FROM verses WHERE verse_ref = ?1 AND lang = ?2`
                 ).bind(verseIdToReview, lang);
-                // ▲▲▲▲▲▲▲▲▲▲ 修正结束 ▲▲▲▲▲▲▲▲▲▲
 
                 const [distractorsResult, reviewResult] = await Promise.all([
                     stmtDistractors.all(),

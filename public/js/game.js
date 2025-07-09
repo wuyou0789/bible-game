@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetUIForNewQuestion('这是哪节经文？', '...');
         }
 
-        fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`)
+        fetch(`${API_ENDPOINTS.newQuestion}?lang=${currentLang}&difficulty=${currentDifficulty}&theme=default`)
             .then(handleFetchError)
             .then(data => {
                 currentQuestionData = data;
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             isLoading = true;
             // 1. 立即在后台开始获取下一题的数据
-            const nextQuestionPromise = fetch(`${API_ENDPOINTS.newQuestion}?lang=zh&difficulty=${currentDifficulty}`).then(handleFetchError);
+            const nextQuestionPromise = fetch(`${API_ENDPOINTS.newQuestion}?lang=${currentLang}&difficulty=${currentDifficulty}&theme=default`).then(handleFetchError);
             // 2. 创建一个保证至少有1秒视觉延迟的Promise
             const delayPromise = new Promise(resolve => setTimeout(resolve, 1000));
 
